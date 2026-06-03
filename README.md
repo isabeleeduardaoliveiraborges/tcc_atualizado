@@ -1,2 +1,2 @@
 # tcc_atualizado
-https://isabeleeduardaoliveiraborges.github.io/tcc_atualizado/ideia-/inicio.html
+https://isabeleeduardaoliveiraborges.github.io/tcc_atualizado/-/inde.html
