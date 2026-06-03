@@ -1,0 +1,647 @@
+Calendario · HTML
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planner de Treino — AdaptMove</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+ 
+        :root {
+            --bg:     #0c0c0f;
+            --bg2:    #13131a;
+            --bg3:    #1a1a24;
+            --accent: #00e5ff;
+            --accent2:#7b2fff;
+            --text:   #f0f0f5;
+            --muted:  #6b6b80;
+            --border: rgba(255,255,255,0.07);
+        }
+ 
+        html { scroll-behavior: smooth; }
+ 
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: background 0.3s, color 0.3s;
+        }
+ 
+        /* ── ALTO CONTRASTE ── */
+        body.alto-contraste {
+            --bg: #000; --bg2: #000; --bg3: #111;
+            --accent: #ffff00; --accent2: #ffff00;
+            --text: #ffff00; --muted: #fff; --border: #ffff00;
+        }
+        body.alto-contraste * { border-color: #ffff00 !important; }
+        body.alto-contraste .week-card  { box-shadow: none !important; }
+        body.alto-contraste .day input[type="text"] {
+            background: #000 !important;
+            color: #ffff00 !important;
+        }
+        body.alto-contraste .day input[type="text"]::placeholder { color: #aaaa00 !important; }
+        body.alto-contraste .week-title { background: #ffff00 !important; color: #000 !important; }
+        body.alto-contraste .progress-fill { background: #ffff00 !important; }
+        body.alto-contraste .btn-save { background: #ffff00 !important; color: #000 !important; }
+ 
+        /* ── FONTE ACESSÍVEL ── */
+        body.fonte-dislexia, body.fonte-dislexia * {
+            font-family: Arial, sans-serif !important;
+            letter-spacing: 0.05em !important;
+            word-spacing: 0.1em !important;
+            line-height: 1.9 !important;
+        }
+ 
+        /* ── BARRA DE ACESSIBILIDADE ── */
+        .a11y-bar {
+            background: #000;
+            padding: 6px 5%;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+        .a11y-bar button {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 4px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.78rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.2s;
+        }
+        .a11y-bar button:hover { background: var(--accent); color: #000; }
+ 
+        /* ── HEADER ── */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(12,12,15,0.92);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 5%;
+        }
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            letter-spacing: 2px;
+            color: var(--text);
+            text-decoration: none;
+        }
+        .logo span { color: var(--accent); }
+ 
+        nav ul { display: flex; list-style: none; gap: 30px; }
+        nav a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+            position: relative;
+        }
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -3px; left: 0;
+            width: 0; height: 2px;
+            background: var(--accent);
+            transition: width 0.3s;
+        }
+        nav a:hover { color: var(--text); }
+        nav a:hover::after { width: 100%; }
+        nav a.active { color: var(--accent); }
+        nav a.active::after { width: 100%; }
+ 
+        /* ── HERO DO CALENDÁRIO ── */
+        .planner-hero {
+            padding: 60px 5% 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .planner-hero::before {
+            content: '';
+            position: absolute; inset: 0;
+            background:
+                radial-gradient(ellipse 70% 80% at 50% 110%, rgba(0,229,255,0.07) 0%, transparent 60%),
+                radial-gradient(ellipse 40% 40% at 80% 10%, rgba(123,47,255,0.08) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .section-label {
+            display: inline-block;
+            background: rgba(0,229,255,0.08);
+            border: 1px solid rgba(0,229,255,0.25);
+            color: var(--accent);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            padding: 5px 16px;
+            border-radius: 30px;
+            margin-bottom: 20px;
+        }
+        .planner-hero h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            letter-spacing: 3px;
+            margin-bottom: 12px;
+            line-height: 1;
+        }
+        .planner-hero p {
+            color: var(--muted);
+            font-size: 1rem;
+            max-width: 520px;
+            margin: 0 auto 32px;
+        }
+ 
+        /* ── CONTROLES DO PLANNER ── */
+        .planner-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 48px;
+        }
+        .month-nav {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 8px 16px;
+        }
+        .month-nav button {
+            background: transparent;
+            border: none;
+            color: var(--muted);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+        .month-nav button:hover { color: var(--accent); background: rgba(0,229,255,0.08); }
+        #mes-atual {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4rem;
+            letter-spacing: 2px;
+            color: var(--text);
+            min-width: 180px;
+            text-align: center;
+        }
+        .btn-save {
+            background: var(--accent);
+            color: #000;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+        }
+        .btn-save:hover { box-shadow: 0 0 20px rgba(0,229,255,0.4); transform: translateY(-1px); }
+        .btn-clear {
+            background: transparent;
+            color: var(--muted);
+            border: 1px solid var(--border);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+        .btn-clear:hover { border-color: #ff4444; color: #ff4444; }
+ 
+        /* ── PROGRESSO MENSAL ── */
+        .progress-section {
+            max-width: 700px;
+            margin: 0 auto 50px;
+            padding: 0 5%;
+        }
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .progress-header span { font-size: 0.85rem; color: var(--muted); font-weight: 500; }
+        .progress-header strong { color: var(--accent); font-size: 1rem; }
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--bg3);
+            border-radius: 99px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            border-radius: 99px;
+            transition: width 0.5s ease;
+        }
+ 
+        /* ── GRID DE SEMANAS ── */
+        .weeks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+            padding: 0 5% 80px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+ 
+        /* ── CARD DE SEMANA ── */
+        .week-card {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 28px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .week-card:hover {
+            border-color: rgba(0,229,255,0.3);
+            box-shadow: 0 8px 30px rgba(0,229,255,0.06);
+        }
+        .week-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 22px;
+        }
+        .week-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            background: rgba(0,229,255,0.1);
+            border: 1px solid rgba(0,229,255,0.25);
+            color: var(--accent);
+            padding: 5px 14px;
+            border-radius: 20px;
+        }
+        .week-progress {
+            font-size: 0.78rem;
+            color: var(--muted);
+            font-weight: 500;
+        }
+        .week-progress span { color: var(--accent); font-weight: 700; }
+ 
+        /* ── DIAS ── */
+        .day-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 0;
+            border-bottom: 1px solid var(--border);
+            transition: background 0.15s;
+        }
+        .day-row:last-child { border-bottom: none; }
+        .day-row.done .day-name { text-decoration: line-through; color: var(--muted); }
+        .day-row.rest { opacity: 0.6; }
+ 
+        .day-check {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .day-name {
+            width: 120px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text);
+            flex-shrink: 0;
+            transition: color 0.2s, text-decoration 0.2s;
+        }
+        .day-input {
+            flex: 1;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 7px 12px;
+            color: var(--text);
+            font-size: 0.85rem;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .day-input::placeholder { color: var(--muted); font-size: 0.8rem; }
+        .day-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(0,229,255,0.1);
+        }
+        .day-input:disabled {
+            background: var(--bg);
+            color: var(--muted);
+            cursor: not-allowed;
+        }
+        .rest-badge {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--muted);
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 5px 10px;
+            text-transform: uppercase;
+        }
+ 
+        /* ── TOAST ── */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--bg2);
+            border: 1px solid var(--accent);
+            color: var(--text);
+            padding: 14px 22px;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+            transform: translateY(80px);
+            opacity: 0;
+            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 999;
+        }
+        .toast.show { transform: translateY(0); opacity: 1; }
+ 
+        /* ── FOOTER ── */
+        footer {
+            background: #000;
+            border-top: 1px solid var(--border);
+            padding: 36px 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        footer .logo { font-size: 1.4rem; }
+        footer p { color: var(--muted); font-size: 0.85rem; }
+ 
+        /* ── RESPONSIVO ── */
+        @media (max-width: 768px) {
+            nav ul { gap: 14px; }
+            nav a  { font-size: 0.8rem; }
+            .weeks-grid { grid-template-columns: 1fr; padding: 0 4% 60px; }
+            .day-name { width: 90px; font-size: 0.75rem; }
+            footer { flex-direction: column; text-align: center; }
+            .planner-controls { gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+ 
+    <!-- BARRA DE ACESSIBILIDADE -->
+    <div class="a11y-bar">
+        <button onclick="alterarFonte()">Fonte Acessível</button>
+        <button onclick="alterarContraste()">Alto Contraste</button>
+    </div>
+ 
+    <!-- HEADER -->
+   
+    
+    <header>
+        <div class="logo">Adapt<span>Move</span></div>
+        <nav>
+            <ul>
+                <li><a href="inde.html">Início</a></li>
+                <li><a href="#sobre">Sobre Nós</a></li>
+                <li><a href="proficionais.html#mapa">Mapa</a></li>
+                <li><a href="recomendados.html">ecomendados</a></li>
+                <li><a href="calendario.html">calendario
+                </a></li>
+                <li><a href="proficionais.html">Profissionais</a></li>
+            </ul>
+        </nav>
+    </header>ass="planner-hero">
+        <div class="section-label">Organização</div>
+        <h1>Planner de Treino</h1>
+        <p>Planeje seu mês, marque os dias concluídos e acompanhe sua evolução semana a semana.</p>
+    </section>
+ 
+    <!-- CONTROLES -->
+    <div class="planner-controls">
+        <div class="month-nav">
+            <button onclick="mudarMes(-1)" title="Mês anterior">&#8592;</button>
+            <span id="mes-atual">ABRIL 2025</span>
+            <button onclick="mudarMes(1)" title="Próximo mês">&#8594;</button>
+        </div>
+        <button class="btn-save" onclick="salvarTreinos()">💾 Salvar</button>
+        <button class="btn-clear" onclick="limparTreinos()">🗑 Limpar Tudo</button>
+    </div>
+ 
+    <!-- BARRA DE PROGRESSO -->
+    <div class="progress-section">
+        <div class="progress-header">
+            <span>Progresso do mês</span>
+            <strong id="progresso-texto">0 / 24 dias concluídos</strong>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+        </div>
+    </div>
+ 
+    <!-- SEMANAS -->
+    <div class="weeks-grid" id="weeks-grid">
+        <!-- Gerado via JS -->
+    </div>
+ 
+    <!-- TOAST -->
+    <div class="toast" id="toast"></div>
+ 
+    <!-- FOOTER -->
+    <footer>
+        <div class="logo">Adapt<span>Move</span></div>
+        <p>&copy; 2026 AdaptMove — Movimento e Inclusão. Todos os direitos reservados.</p>
+    </footer>
+ 
+    <script>
+        /* ========== ACESSIBILIDADE ========== */
+        function alterarFonte() {
+            document.body.classList.toggle('fonte-dislexia');
+        }
+        function alterarContraste() {
+            document.body.classList.toggle('alto-contraste');
+        }
+ 
+        /* ========== DADOS ========== */
+        const DIAS = ['Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado','Domingo'];
+        const MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+        const NUM_SEMANAS = 4;
+ 
+        let mesAtual  = new Date().getMonth();
+        let anoAtual  = new Date().getFullYear();
+ 
+        /* ========== CHAVE DE STORAGE ========== */
+        function storageKey() {
+            return `adaptmove_planner_${anoAtual}_${mesAtual}`;
+        }
+ 
+        /* ========== RENDERIZAR SEMANAS ========== */
+        function renderizar() {
+            document.getElementById('mes-atual').textContent = `${MESES[mesAtual].toUpperCase()} ${anoAtual}`;
+ 
+            const grid = document.getElementById('weeks-grid');
+            grid.innerHTML = '';
+ 
+            const dados = JSON.parse(localStorage.getItem(storageKey()) || '{}');
+ 
+            for (let s = 1; s <= NUM_SEMANAS; s++) {
+                const card = document.createElement('div');
+                card.className = 'week-card';
+                card.innerHTML = `
+                    <div class="week-header">
+                        <span class="week-title">SEMANA ${s}</span>
+                        <span class="week-progress">Concluídos: <span id="wcount-${s}">0</span>/6</span>
+                    </div>
+                    <div id="days-${s}"></div>
+                `;
+                grid.appendChild(card);
+ 
+                const container = document.getElementById(`days-${s}`);
+                DIAS.forEach((dia, i) => {
+                    const key   = `s${s}_d${i}`;
+                    const check = dados[key + '_check'] || false;
+                    const val   = dados[key + '_val']   || '';
+                    const isRest = (i === 6); // domingo = descanso
+ 
+                    const row = document.createElement('div');
+                    row.className = 'day-row' + (isRest ? ' rest' : '') + (check ? ' done' : '');
+                    row.dataset.key = key;
+ 
+                    if (isRest) {
+                        row.innerHTML = `
+                            <input type="checkbox" class="day-check" ${check ? 'checked' : ''} onchange="toggleDia(this)">
+                            <span class="day-name">${dia}</span>
+                            <span class="rest-badge">🛌 Descanso</span>
+                        `;
+                    } else {
+                        row.innerHTML = `
+                            <input type="checkbox" class="day-check" ${check ? 'checked' : ''} onchange="toggleDia(this)">
+                            <span class="day-name">${dia}</span>
+                            <input type="text" class="day-input" placeholder="Treino do dia..." value="${val}" oninput="atualizarInput(this)">
+                        `;
+                    }
+                    container.appendChild(row);
+                });
+            }
+ 
+            atualizarProgresso();
+        }
+ 
+        /* ========== TOGGLE CHECKBOX ========== */
+        function toggleDia(checkbox) {
+            const row = checkbox.closest('.day-row');
+            const key = row.dataset.key;
+            if (checkbox.checked) {
+                row.classList.add('done');
+            } else {
+                row.classList.remove('done');
+            }
+            salvarEstado();
+            atualizarProgresso();
+        }
+ 
+        /* ========== ATUALIZAR INPUT ========== */
+        function atualizarInput(input) {
+            salvarEstado();
+        }
+ 
+        /* ========== SALVAR ESTADO (auto) ========== */
+        function salvarEstado() {
+            const dados = {};
+            document.querySelectorAll('.day-row').forEach(row => {
+                const key   = row.dataset.key;
+                const check = row.querySelector('.day-check');
+                const input = row.querySelector('.day-input');
+                if (key) {
+                    dados[key + '_check'] = check ? check.checked : false;
+                    dados[key + '_val']   = input  ? input.value  : '';
+                }
+            });
+            localStorage.setItem(storageKey(), JSON.stringify(dados));
+        }
+ 
+        /* ========== SALVAR (botão) ========== */
+        function salvarTreinos() {
+            salvarEstado();
+            mostrarToast('✅ Treinos salvos com sucesso!');
+        }
+ 
+        /* ========== LIMPAR ========== */
+        function limparTreinos() {
+            if (!confirm('Tem certeza? Todos os treinos deste mês serão apagados.')) return;
+            localStorage.removeItem(storageKey());
+            renderizar();
+            mostrarToast('🗑 Treinos apagados.');
+        }
+ 
+        /* ========== PROGRESSO ========== */
+        function atualizarProgresso() {
+            let total    = 0;
+            let checked  = 0;
+ 
+            for (let s = 1; s <= NUM_SEMANAS; s++) {
+                let wChecked = 0;
+                document.querySelectorAll(`#days-${s} .day-row`).forEach(row => {
+                    const isRest = row.classList.contains('rest');
+                    if (!isRest) total++;
+                    const cb = row.querySelector('.day-check');
+                    if (cb && cb.checked && !isRest) { checked++; wChecked++; }
+                });
+                const wSpan = document.getElementById(`wcount-${s}`);
+                if (wSpan) wSpan.textContent = wChecked;
+            }
+ 
+            const pct = total > 0 ? Math.round((checked / total) * 100) : 0;
+            document.getElementById('progress-fill').style.width = pct + '%';
+            document.getElementById('progresso-texto').textContent = `${checked} / ${total} dias concluídos`;
+        }
+ 
+        /* ========== NAVEGAÇÃO DE MÊS ========== */
+        function mudarMes(delta) {
+            mesAtual += delta;
+            if (mesAtual > 11) { mesAtual = 0;  anoAtual++; }
+            if (mesAtual < 0)  { mesAtual = 11; anoAtual--; }
+            renderizar();
+        }
+ 
+        /* ========== TOAST ========== */
+        function mostrarToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2800);
+        }
+ 
+        /* ========== INIT ========== */
+        renderizar();
+    </script>
+</body>
+</html>

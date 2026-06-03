@@ -1,0 +1,456 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AdaptMove</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #0c0c0f;
+            --bg2: #13131a;
+            --bg3: #1a1a24;
+            --accent: #00e5ff;
+            --accent2: #7b2fff;
+            --text: #f0f0f5;
+            --muted: #6b6b80;
+            --border: rgba(255,255,255,0.07);
+            --fonte-tamanho-base: 16px;
+        }
+
+        html { scroll-behavior: smooth; font-size: var(--fonte-tamanho-base); }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* ── MODOS DE ACESSIBILIDADE VIA JAVASCRIPT ── */
+        body.alto-contraste {
+            --bg: #000000 !important; 
+            --bg2: #000000 !important; 
+            --bg3: #000000 !important;
+            --accent: #ffff00 !important; 
+            --accent2: #ffff00 !important;
+            --text: #ffff00 !important; 
+            --muted: #ffffff !important; 
+            --border: #ffff00 !important;
+        }
+        body.alto-contraste * { border-color: #ffff00 !important; }
+
+        body.fonte-dislexia, body.fonte-dislexia * {
+            font-family: Arial, sans-serif !important;
+            letter-spacing: 0.05em !important;
+            word-spacing: 0.1em !important;
+            line-height: 1.9 !important;
+        }
+
+        /* ── BARRA DE ACESSIBILIDADE ── */
+        .a11y-bar {
+            background: #000;
+            padding: 6px 5%;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+        .a11y-bar button {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 4px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.78rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.2s;
+        }
+        .a11y-bar button:hover { background: var(--accent); color: #000; }
+
+        /* ── HEADER & MENU NAVEGAÇÃO ── */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(12,12,15,0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 5%;
+        }
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            letter-spacing: 2px;
+            color: var(--text);
+            text-decoration: none;
+        }
+        .logo span { color: var(--accent); }
+        
+        nav ul { display: flex; list-style: none; gap: 30px; }
+        nav a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+            position: relative;
+        }
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -3px; left: 0;
+            width: 0; height: 2px;
+            background: var(--accent);
+            transition: width 0.3s;
+        }
+        nav a:hover { color: var(--text); }
+        nav a:hover::after { width: 100%; }
+        nav a.active { color: var(--accent); }
+        nav a.active::after { width: 100%; }
+
+        /* ── HERO MINI ── */
+        .page-hero {
+            padding: 80px 5% 60px;
+            text-align: center;
+            background:
+                radial-gradient(ellipse 60% 50% at 50% 100%, rgba(0,229,255,0.07) 0%, transparent 60%),
+                radial-gradient(ellipse 40% 30% at 20% 0%, rgba(123,47,255,0.08) 0%, transparent 50%);
+            border-bottom: 1px solid var(--border);
+        }
+        .page-hero .tag {
+            display: inline-block;
+            background: rgba(0,229,255,0.1);
+            border: 1px solid rgba(0,229,255,0.3);
+            color: var(--accent);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            padding: 5px 16px;
+            border-radius: 30px;
+            margin-bottom: 20px;
+        }
+        .page-hero h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            letter-spacing: 2px;
+            line-height: 1.0;
+            margin-bottom: 16px;
+        }
+        .page-hero p { color: var(--muted); font-size: 1rem; max-width: 600px; margin: 0 auto; }
+
+        /* ── GRID DE CARDS DO PORTAL ── */
+        .container {
+            padding: 80px 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .content-card {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.35s cubic-bezier(0.165, 0.84, 0.44, 1);
+            position: relative;
+        }
+        
+        .content-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            transform: scaleX(0);
+            transition: transform 0.35s;
+            transform-origin: left;
+            z-index: 2;
+        }
+
+        .content-card:hover {
+            border-color: rgba(0,229,255,0.3);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(0,229,255,0.1);
+        }
+        
+        .content-card:hover::before { transform: scaleX(1); }
+
+        .card-image-wrapper {
+            position: relative;
+            width: 100%;
+            height: 180px;
+            overflow: hidden;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .content-card:hover .card-image-wrapper img {
+            transform: scale(1.05);
+        }
+
+        .card-link-area {
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .card-body {
+            padding: 24px;
+            flex-grow: 1;
+        }
+
+        .card-body h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text);
+            letter-spacing: -0.3px;
+            line-height: 1.3;
+        }
+
+        .card-body p {
+            font-size: 0.9rem;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .card-footer {
+            padding: 16px 24px;
+            background: rgba(0, 0, 0, 0.2);
+            border-top: 1px solid var(--border);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--accent);
+            letter-spacing: 0.5px;
+        }
+
+        /* ── RESPONSIVO ── */
+        @media (max-width: 768px) {
+            header { flex-direction: column; gap: 16px; text-align: center; }
+            nav ul { gap: 16px; }
+            nav a { font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="a11y-bar">
+        <button onclick="alterarFonte()">Fonte Acessível</button>
+        <button onclick="alterarContraste()">Alto Contraste</button>
+    </div>
+
+    
+    <header>
+        <div class="logo">Adapt<span>Move</span></div>
+        <nav>
+            <ul>
+                <li><a href="inde.html">Início</a></li>
+                <li><a href="#sobre">Sobre Nós</a></li>
+                <li><a href="proficionais.html#mapa">Mapa</a></li>
+                <li><a href="recomendados.html">ecomendados</a></li>
+                <li><a href="calendario.html">calendario
+                </a></li>
+                <li><a href="proficionais.html">Profissionais</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="page-hero" id="inicio">
+        <div class="tag">Multimídia</div>
+        <h1>Portal de Vídeos e Artigos</h1>
+        <p>Explore nosso acervo completo de produções, estudos, micologia clínica e registros institucionais adaptados.</p>
+    </div>
+
+    <main class="container">
+        <div class="content-grid">
+            
+            <article class="content-card">
+                <div class="card-image-wrapper">
+                    <img src="https://unsplash.it/600/400?random=1" alt="Cenário misterioso e escuro">
+                </div>
+                <a href="https://www.youtube.com/watch?v=LepK245_uUw" target="_blank" class="card-link-area">
+                    <div class="card-body">
+                        <h2>Ordem Paranormal: Desconjuração</h2>
+                        <p>Acompanhe os investigadores enfrentando os mistérios do outro lado neste episódio intenso e repleto de reviravoltas ocultistas.</p>
+                    </div>
+                </a>
+                <div class="card-footer">
+                    <span>👤 AUTOR(ES): Cellbit</span>
+                </div>
+            </article>
+
+            <article class="content-card" id="saude">
+                <div class="card-image-wrapper">
+                    <img src="https://unsplash.it/600/400?random=2" alt="Imagem ilustrativa de Esporotricose">
+                </div>
+                <a href="https://www.youtube.com" target="_blank" class="card-link-area">
+                    <div class="card-body">
+                        <h2>Esporotricose</h2>
+                        <p>A esporotricose é a micose subcutânea mais comum no Brasil e na América Latina. Depoimentos esclarecem a transmissão, os sintomas e o tratamento.</p>
+                    </div>
+                </a>
+                <div class="card-footer">
+                    <span>👤 AUTOR(ES): Thielen, Eduardo Vilela</span>
+                </div>
+            </article>
+
+            <article class="content-card">
+                <div class="card-image-wrapper">
+                    <img src="https://unsplash.it/600/400?random=3" alt="Solo agrícola seco indicando endemia">
+                </div>
+                <a href="https://www.youtube.com" target="_blank" class="card-link-area">
+                    <div class="card-body">
+                        <h2>Paracoco: endemia brasileira</h2>
+                        <p>A paracoccidioidomicose está entre as dez doenças crônicas que mais causam mortes no país. No Brasil, ocorrem 80% dos casos da doença.</p>
+                    </div>
+                </a>
+                <div class="card-footer">
+                    <span>👤 AUTOR(ES): Thielen, Eduardo Vilela</span>
+                </div>
+            </article>
+
+            <article class="content-card">
+                <div class="card-image-wrapper">
+                    <img src="https://unsplash.it/600/400?random=4" alt="Animação explicativa médica">
+                </div>
+                <a href="https://www.youtube.com" target="_blank" class="card-link-area">
+                    <div class="card-body">
+                        <h2>Para o quê? Paracoccidioidomicose: não é palavrão e tem cura</h2>
+                        <p>Apresenta os cuidados necessários para combater a paracoccidioidomicose, classificada como doença negligenciada, que possui tratamento se identificada precocemente.</p>
+                    </div>
+                </a>
+                <div class="card-footer">
+                    <span>👤 AUTOR(ES): Santana, Raul</span>
+                </div>
+            </article>
+
+            <article class="content-card" id="inovacao">
+                <div class="card-image-wrapper">
+                    <img src="https://unsplash.it/600/400?random=5" alt="Gráfico de gestão e fitomedicamentos">
+                </div>
+                <a href="https://www.youtube.com" target="_blank" class="card-link-area">
+                    <div class="card-body">
+                        <h2>Gestão da inovação em Fitomedicamentos (aula 3 Jislaine Guilhermino)</h2>
+                        <p>Qualificar profissionais para atuarem como gestores na cadeia produtiva de medicamentos de origem vegetal, utilizando o conceito analítico do Complexo Industrial da Saúde.</p>
+                    </div>
+                </a>
+                <div class="card-footer">
+                    <span>👤 AUTOR(ES): Guilhermino, Jislaine De Fátima</span>
+                </div>
+            </article>
+
+            <article class="content-card">
+                <div class="card-image-wrapper">
+                    <img src="https://unsplash.it/600/400?random=6" alt="Validação de tecnologia em laboratório">
+                </div>
+                <a href="https://www.youtube.com" target="_blank" class="card-link-area">
+                    <div class="card-body">
+                        <h2>Validação tecnológica em projetos de desenvolvimento no segmento de...</h2>
+                        <p>Qualificar profissionais graduados em Farmácia, química e áreas afins para atuar como gestores em qualquer segmento do mercado de fitomedicamentos vegetais.</p>
+                    </div>
+                </a>
+                <div class="card-footer">
+                    <span>👤 AUTOR(ES): Guilhermino, Jislaine De Fátima</span>
+                </div>
+            </article>
+
+            <article class="content-card">
+                <div class="card-image-wrapper">
+                    <img src="https://unsplash.it/600/400?random=7" alt="Identificação botânica e taxonomia">
+                </div>
+                <a href="https://www.youtube.com" target="_blank" class="card-link-area">
+                    <div class="card-body">
+                        <h2>Validação tecnológica para projetos em desenvolvimento (aula 2 Jislaine)</h2>
+                        <p>Foco voltado à Botânica: Anatomia, Morfologia e Identificação Taxonômica aplicadas no gerenciamento do desenvolvimento tecnológico de novos medicamentos.</p>
+                    </div>
+                </a>
+                <div class="card-footer">
+                    <span>👤 AUTOR(ES): Guilhermino, Jislaine De Fátima</span>
+                </div>
+            </article>
+
+            <article class="content-card" id="esporte">
+                <div class="card-image-wrapper">
+                    <img src="https://unsplash.it/600/400?random=8" alt="Pessoa praticando arte marcial adaptada no pôr do sol">
+                </div>
+                <a href="https://www.youtube.com" target="_blank" class="card-link-area">
+                    <div class="card-body">
+                        <h2>AdaptMove: A Arte Marcial como Caminho para Todos</h2>
+                        <p>No esporte adaptado, a inclusão transforma o tatame em um espaço onde cada limitação é acolhida como um desafio técnico a ser vencido com criatividade.</p>
+                    </div>
+                </a>
+                <div class="card-footer">
+                    <span>👤 AUTOR(ES): Equipe AdaptMove (SP)</span>
+                </div>
+            </article>
+
+            <article class="content-card">
+                <div class="card-image-wrapper">
+                    <img src="https://unsplash.it/600/400?random=9" alt="Treinamento esportivo inclusivo">
+                </div>
+                <a href="https://www.youtube.com" target="_blank" class="card-link-area">
+                    <div class="card-body">
+                        <h2>Adaptação Esportiva e o Desenvolvimento de Autonomia</h2>
+                        <p>Seja no Judô, no Jiu-Jitsu ou no Karatê, a adaptação esportiva desenvolve autonomia, coordenação motora e, acima de tudo, eleva a autoestima do atleta.</p>
+                    </div>
+                </a>
+                <div class="card-footer">
+                    <span>👤 AUTOR(ES): Equipe AdaptMove</span>
+                </div>
+            </article>
+
+        </div>
+    </main>
+
+    <script>
+        // Função de Alto Contraste adaptada
+        function alterarContraste() {
+            document.body.classList.toggle('alto-contraste');
+        }
+
+        // Função de Fonte Acessível (Alterna entre Inter e Arial Limpo para Dislexia/Leitura Dinâmica)
+        function alterarFonte() {
+            document.body.classList.toggle('fonte-dislexia');
+        }
+
+        // Efeito de destaque dinâmico no menu ao rolar a página (Opcional)
+        const links = document.querySelectorAll('nav a');
+        links.forEach(link => {
+            link.addEventListener('click', function() {
+                links.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
+
+```
