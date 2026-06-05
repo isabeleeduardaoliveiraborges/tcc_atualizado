@@ -1,4 +1,3 @@
-Calendario · HTML
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -7,20 +6,28 @@ Calendario · HTML
     <title>Planner de Treino — AdaptMove</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
- 
-        :root {
-            --bg:     #0c0c0f;
-            --bg2:    #13131a;
-            --bg3:    #1a1a24;
-            --accent: #00e5ff;
-            --accent2:#7b2fff;
-            --text:   #f0f0f5;
-            --muted:  #6b6b80;
-            --border: rgba(255,255,255,0.07);
+        *, *::before, *::after { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
         }
  
-        html { scroll-behavior: smooth; }
+        :root {
+            --bg:      #0c0c0f;
+            --bg2:     #13131a;
+            --bg3:     #1a1a24;
+            --accent:  #00e5ff;
+            --accent2: #7b2fff;
+            --text:    #f0f0f5;
+            --muted:   #6b6b80;
+            --border:  rgba(255,255,255,0.07);
+            --success: #00e676;
+            --favorite: #ffd600;
+        }
+ 
+        html { 
+            scroll-behavior: smooth; 
+        }
  
         body {
             background: var(--bg);
@@ -39,14 +46,16 @@ Calendario · HTML
         }
         body.alto-contraste * { border-color: #ffff00 !important; }
         body.alto-contraste .week-card  { box-shadow: none !important; }
-        body.alto-contraste .day input[type="text"] {
+        body.alto-contraste .day input[type="text"], 
+        body.alto-contraste .day-time,
+        body.alto-contraste .goal-input-field {
             background: #000 !important;
             color: #ffff00 !important;
         }
-        body.alto-contraste .day input[type="text"]::placeholder { color: #aaaa00 !important; }
+        body.alto-contraste input::placeholder { color: #aaaa00 !important; }
         body.alto-contraste .week-title { background: #ffff00 !important; color: #000 !important; }
         body.alto-contraste .progress-fill { background: #ffff00 !important; }
-        body.alto-contraste .btn-save { background: #ffff00 !important; color: #000 !important; }
+        body.alto-contraste .btn-save, body.alto-contraste .btn-reminders, body.alto-contraste .btn-action { background: #ffff00 !important; color: #000 !important; }
  
         /* ── FONTE ACESSÍVEL ── */
         body.fonte-dislexia, body.fonte-dislexia * {
@@ -126,7 +135,7 @@ Calendario · HTML
  
         /* ── HERO DO CALENDÁRIO ── */
         .planner-hero {
-            padding: 60px 5% 40px;
+            padding: 60px 5% 30px;
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -163,7 +172,62 @@ Calendario · HTML
             color: var(--muted);
             font-size: 1rem;
             max-width: 520px;
-            margin: 0 auto 32px;
+            margin: 0 auto 20px;
+        }
+
+        /* ── CONTROLES EXTRA ── */
+        .extra-controls {
+            display: flex;
+            max-width: 700px;
+            margin: 0 auto 25px;
+            padding: 0 5%;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .frequency-badge {
+            background: rgba(123, 47, 255, 0.1);
+            border: 1px solid rgba(123, 47, 255, 0.3);
+            color: #bfa3ff;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-reminders {
+            background: rgba(0, 229, 255, 0.1);
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            color: var(--accent);
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s;
+        }
+        .btn-reminders:hover { background: var(--accent); color: #000; }
+
+        /* BOTÃO DE DIRECIONAMENTO PARA METAS */
+        .btn-action {
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            color: #000;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(0, 229, 255, 0.2);
+        }
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 229, 255, 0.4);
         }
  
         /* ── CONTROLES DO PLANNER ── */
@@ -173,7 +237,7 @@ Calendario · HTML
             justify-content: center;
             gap: 16px;
             flex-wrap: wrap;
-            margin-bottom: 48px;
+            margin-bottom: 40px;
         }
         .month-nav {
             display: flex;
@@ -264,9 +328,9 @@ Calendario · HTML
         /* ── GRID DE SEMANAS ── */
         .weeks-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 24px;
-            padding: 0 5% 80px;
+            padding: 0 5% 40px;
             max-width: 1400px;
             margin: 0 auto;
         }
@@ -276,7 +340,7 @@ Calendario · HTML
             background: var(--bg2);
             border: 1px solid var(--border);
             border-radius: 20px;
-            padding: 28px;
+            padding: 24px;
             transition: border-color 0.3s, box-shadow 0.3s;
         }
         .week-card:hover {
@@ -306,38 +370,51 @@ Calendario · HTML
         }
         .week-progress span { color: var(--accent); font-weight: 700; }
  
-        /* ── DIAS ── */
+        /* ── ESTRUTURA DOS DIAS ── */
         .day-row {
-            display: flex;
+            display: grid;
+            grid-template-columns: auto 100px 75px 1fr;
             align-items: center;
             gap: 10px;
-            padding: 9px 0;
+            padding: 10px 0;
             border-bottom: 1px solid var(--border);
-            transition: background 0.15s;
         }
         .day-row:last-child { border-bottom: none; }
         .day-row.done .day-name { text-decoration: line-through; color: var(--muted); }
         .day-row.rest { opacity: 0.6; }
+        .day-row.rest .rest-badge { grid-column: span 2; }
  
         .day-check {
             width: 18px;
             height: 18px;
             accent-color: var(--accent);
             cursor: pointer;
-            flex-shrink: 0;
         }
         .day-name {
-            width: 120px;
-            font-size: 0.82rem;
+            font-size: 0.8rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             color: var(--text);
-            flex-shrink: 0;
-            transition: color 0.2s, text-decoration 0.2s;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
+        .day-time {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 6px;
+            padding: 4px 6px;
+            font-size: 0.78rem;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            width: 100%;
+            text-align: center;
+        }
+        .day-time:focus { border-color: var(--accent); }
+
         .day-input {
-            flex: 1;
             background: var(--bg3);
             border: 1px solid var(--border);
             border-radius: 8px;
@@ -346,17 +423,13 @@ Calendario · HTML
             font-size: 0.85rem;
             font-family: 'Inter', sans-serif;
             outline: none;
+            width: 100%;
             transition: border-color 0.2s, box-shadow 0.2s;
         }
         .day-input::placeholder { color: var(--muted); font-size: 0.8rem; }
         .day-input:focus {
             border-color: var(--accent);
             box-shadow: 0 0 0 3px rgba(0,229,255,0.1);
-        }
-        .day-input:disabled {
-            background: var(--bg);
-            color: var(--muted);
-            cursor: not-allowed;
         }
         .rest-badge {
             font-size: 0.72rem;
@@ -368,6 +441,158 @@ Calendario · HTML
             border-radius: 6px;
             padding: 5px 10px;
             text-transform: uppercase;
+            text-align: center;
+            width: 100%;
+        }
+
+        /* ── ÁREA DE METAS DINÂMICAS ── */
+        .planning-section {
+            max-width: 1400px;
+            margin: 20px auto 80px;
+            padding: 0 5%;
+            scroll-margin-top: 100px;
+        }
+        .planning-card {
+            background: linear-gradient(135deg, var(--bg2) 0%, #171724 100%);
+            border: 1px solid rgba(0, 229, 255, 0.15);
+            border-radius: 24px;
+            padding: 35px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        .planning-header-block {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 15px;
+        }
+        .planning-card h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.2rem;
+            letter-spacing: 1px;
+            color: var(--accent);
+        }
+
+        /* INPUT DE ADICIONAR META */
+        .goal-input-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        .goal-input-field {
+            flex: 1;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 20px;
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.2s;
+        }
+        .goal-input-field:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 10px rgba(0, 229, 255, 0.1);
+        }
+        .btn-add-goal {
+            background: var(--accent);
+            color: #000;
+            border: none;
+            padding: 0 24px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s;
+        }
+        .btn-add-goal:hover { opacity: 0.9; transform: translateY(-1px); }
+
+        /* LISTA DE METAS ADICIONADAS */
+        .goals-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+        .goals-list::-webkit-scrollbar { width: 6px; }
+        .goals-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+
+        .goal-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            padding: 14px 20px;
+            border-radius: 14px;
+            transition: all 0.2s;
+        }
+        .goal-item:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(0, 229, 255, 0.15);
+        }
+        .goal-item.completed {
+            border-color: rgba(0, 230, 118, 0.3);
+            background: rgba(0, 230, 118, 0.02);
+        }
+        .goal-item.completed .goal-text {
+            text-decoration: line-through;
+            color: var(--muted);
+        }
+        .goal-item.fav {
+            border-color: rgba(255, 214, 0, 0.3);
+            background: rgba(255, 214, 0, 0.01);
+            order: -1; /* Joga os favoritos para o topo da lista */
+        }
+
+        .goal-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex: 1;
+        }
+        .goal-text {
+            font-size: 0.95rem;
+            color: var(--text);
+            font-weight: 500;
+            word-break: break-word;
+        }
+        .goal-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-goal-action {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            color: var(--muted);
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+        .btn-goal-action:hover { color: var(--text); border-color: var(--muted); }
+        .btn-goal-action.check-btn:hover, .goal-item.completed .check-btn { color: var(--success); border-color: var(--success); background: rgba(0, 230, 118, 0.1); }
+        .btn-goal-action.fav-btn:hover, .goal-item.fav .fav-btn { color: var(--favorite); border-color: var(--favorite); background: rgba(255, 214, 0, 0.1); }
+        .btn-goal-action.delete-btn:hover { color: #ff4444; border-color: #ff4444; background: rgba(255, 68, 68, 0.1); }
+
+        .empty-goals {
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9rem;
+            padding: 30px 0;
         }
  
         /* ── TOAST ── */
@@ -408,10 +633,19 @@ Calendario · HTML
         @media (max-width: 768px) {
             nav ul { gap: 14px; }
             nav a  { font-size: 0.8rem; }
-            .weeks-grid { grid-template-columns: 1fr; padding: 0 4% 60px; }
-            .day-name { width: 90px; font-size: 0.75rem; }
+            .weeks-grid { grid-template-columns: 1fr; padding: 0 4% 40px; }
+            .day-row {
+                grid-template-columns: auto 75px 65px 1fr;
+                gap: 6px;
+            }
+            .day-name { font-size: 0.75rem; width: auto; }
+            .day-time { font-size: 0.72rem; padding: 4px; }
+            .day-input { font-size: 0.8rem; padding: 6px 10px; }
             footer { flex-direction: column; text-align: center; }
             .planner-controls { gap: 10px; }
+            .planning-header-block { flex-direction: column; align-items: flex-start; }
+            .goal-input-container { flex-direction: column; }
+            .btn-add-goal { padding: 12px; }
         }
     </style>
 </head>
@@ -424,8 +658,6 @@ Calendario · HTML
     </div>
  
     <!-- HEADER -->
-   
-    
     <header>
         <div class="logo">Adapt<span>Move</span></div>
         <nav>
@@ -434,26 +666,37 @@ Calendario · HTML
                 <li><a href="#sobre">Sobre Nós</a></li>
                 <li><a href="proficionais.html#mapa">Mapa</a></li>
                 <li><a href="recomendados.html">ecomendados</a></li>
-                <li><a href="calendario.html">calendario
-                </a></li>
+                <li><a href="calendario.html" class="active">calendario</a></li>
                 <li><a href="proficionais.html">Profissionais</a></li>
             </ul>
         </nav>
-    </header>ass="planner-hero">
+    </header>
+
+    <!-- HERO -->
+    <section class="planner-hero">
         <div class="section-label">Organização</div>
         <h1>Planner de Treino</h1>
         <p>Planeje seu mês, marque os dias concluídos e acompanhe sua evolução semana a semana.</p>
     </section>
+
+    <!-- HORÁRIOS, LEMBRETES, CONTROLE E DIRECIONADOR -->
+    <div class="extra-controls">
+        <div class="frequency-badge" id="freq-badge">
+            🔥 Maior Frequência: 0 dias seguidos
+        </div>
+        <button class="btn-reminders" onclick="configurarLembrete()">🔔 Ativar Lembretes</button>
+        <button class="btn-action" onclick="irParaMetas()">🎯 Ver Quadro de Metas</button>
+    </div>
  
-    <!-- CONTROLES -->
+    <!-- CONTROLES MENSAL -->
     <div class="planner-controls">
         <div class="month-nav">
             <button onclick="mudarMes(-1)" title="Mês anterior">&#8592;</button>
             <span id="mes-atual">ABRIL 2025</span>
             <button onclick="mudarMes(1)" title="Próximo mês">&#8594;</button>
         </div>
-        <button class="btn-save" onclick="salvarTreinos()">💾 Salvar</button>
-        <button class="btn-clear" onclick="limparTreinos()">🗑 Limpar Tudo</button>
+        <button class="btn-save" onclick="salvarTreinos()">💾 Salvar Tudo</button>
+        <button class="btn-clear" onclick="limparTreinos()">🗑 Limpar Mês</button>
     </div>
  
     <!-- BARRA DE PROGRESSO -->
@@ -467,9 +710,30 @@ Calendario · HTML
         </div>
     </div>
  
-    <!-- SEMANAS -->
+    <!-- CALENDÁRIO SEMANAL -->
     <div class="weeks-grid" id="weeks-grid">
-        <!-- Gerado via JS -->
+        <!-- Gerado dinamicamente -->
+    </div>
+
+    <!-- ÁREA EXCLUSIVA INTERATIVA: METAS A BATER -->
+    <div class="planning-section" id="area-metas">
+        <div class="planning-card">
+            <div class="planning-header-block">
+                <h2>🎯 Minhas Metas a Bater</h2>
+                <span style="color: var(--muted); font-size: 0.85rem;">Adicione, favorite ou conclua seus desafios mensais</span>
+            </div>
+            
+            <!-- Adicionar Nova Meta -->
+            <div class="goal-input-container">
+                <input type="text" id="new-goal-text" class="goal-input-field" placeholder="Ex: Fazer 4 dias de cardio na semana, aumentar carga do supino, beber 3L de água...">
+                <button class="btn-add-goal" onclick="adicionarMeta()">➕ Adicionar Meta</button>
+            </div>
+
+            <!-- Lista de metas renderizada -->
+            <div class="goals-list" id="goals-list-container">
+                <!-- Injetado dinamicamente por JS -->
+            </div>
+        </div>
     </div>
  
     <!-- TOAST -->
@@ -483,27 +747,26 @@ Calendario · HTML
  
     <script>
         /* ========== ACESSIBILIDADE ========== */
-        function alterarFonte() {
-            document.body.classList.toggle('fonte-dislexia');
-        }
-        function alterarContraste() {
-            document.body.classList.toggle('alto-contraste');
+        function alterarFonte() { document.body.classList.toggle('fonte-dislexia'); }
+        function alterarContraste() { document.body.classList.toggle('alto-contraste'); }
+
+        /* ========== ROLAGEM SUAVE ========== */
+        function irParaMetas() {
+            document.getElementById('area-metas').scrollIntoView({ behavior: 'smooth' });
         }
  
         /* ========== DADOS ========== */
-        const DIAS = ['Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado','Domingo'];
+        const DIAS = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
         const MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
         const NUM_SEMANAS = 4;
  
         let mesAtual  = new Date().getMonth();
         let anoAtual  = new Date().getFullYear();
+        let listaMetas = []; // Array temporário para controlar a lista dinamicamente
  
-        /* ========== CHAVE DE STORAGE ========== */
-        function storageKey() {
-            return `adaptmove_planner_${anoAtual}_${mesAtual}`;
-        }
+        function storageKey() { return `adaptmove_planner_${anoAtual}_${mesAtual}`; }
  
-        /* ========== RENDERIZAR SEMANAS ========== */
+        /* ========== RENDERIZAR PLANNER COMPLETO ========== */
         function renderizar() {
             document.getElementById('mes-atual').textContent = `${MESES[mesAtual].toUpperCase()} ${anoAtual}`;
  
@@ -511,6 +774,10 @@ Calendario · HTML
             grid.innerHTML = '';
  
             const dados = JSON.parse(localStorage.getItem(storageKey()) || '{}');
+
+            // Carrega e reconstrói as metas interativas
+            listaMetas = dados['metas_interativas'] || [];
+            renderizarMetas();
  
             for (let s = 1; s <= NUM_SEMANAS; s++) {
                 const card = document.createElement('div');
@@ -529,7 +796,8 @@ Calendario · HTML
                     const key   = `s${s}_d${i}`;
                     const check = dados[key + '_check'] || false;
                     const val   = dados[key + '_val']   || '';
-                    const isRest = (i === 6); // domingo = descanso
+                    const time  = dados[key + '_time']  || '';
+                    const isRest = (i === 6);
  
                     const row = document.createElement('div');
                     row.className = 'day-row' + (isRest ? ' rest' : '') + (check ? ' done' : '');
@@ -539,13 +807,14 @@ Calendario · HTML
                         row.innerHTML = `
                             <input type="checkbox" class="day-check" ${check ? 'checked' : ''} onchange="toggleDia(this)">
                             <span class="day-name">${dia}</span>
-                            <span class="rest-badge">🛌 Descanso</span>
+                            <div class="rest-badge">🛌 Descanso</div>
                         `;
                     } else {
                         row.innerHTML = `
                             <input type="checkbox" class="day-check" ${check ? 'checked' : ''} onchange="toggleDia(this)">
                             <span class="day-name">${dia}</span>
-                            <input type="text" class="day-input" placeholder="Treino do dia..." value="${val}" oninput="atualizarInput(this)">
+                            <input type="time" class="day-time" value="${time}" oninput="atualizarTime(this)" title="Horário">
+                            <input type="text" class="day-input" placeholder="Treino..." value="${val}" oninput="atualizarInput(this)">
                         `;
                     }
                     container.appendChild(row);
@@ -555,65 +824,142 @@ Calendario · HTML
             atualizarProgresso();
         }
  
-        /* ========== TOGGLE CHECKBOX ========== */
         function toggleDia(checkbox) {
             const row = checkbox.closest('.day-row');
-            const key = row.dataset.key;
-            if (checkbox.checked) {
-                row.classList.add('done');
-            } else {
-                row.classList.remove('done');
-            }
+            if (checkbox.checked) { row.classList.add('done'); } else { row.classList.remove('done'); }
             salvarEstado();
             atualizarProgresso();
         }
  
-        /* ========== ATUALIZAR INPUT ========== */
-        function atualizarInput(input) {
+        function atualizarInput(input) { salvarEstado(); }
+        function atualizarTime(timeInput) { salvarEstado(); }
+
+        /* ========== FUNÇÕES DO GERENCIADOR DE METAS ========== */
+        function adicionarMeta() {
+            const inputField = document.getElementById('new-goal-text');
+            const texto = inputField.value.trim();
+            
+            if (!texto) {
+                alert("Por favor, digite alguma meta antes de adicionar.");
+                return;
+            }
+
+            const novaMeta = {
+                id: Date.now(),
+                text: texto,
+                completed: false,
+                fav: false
+            };
+
+            listaMetas.push(novaMeta);
+            inputField.value = '';
             salvarEstado();
+            renderizarMetas();
+            mostrarToast("🎯 Meta adicionada ao quadro!");
+        }
+
+        function renderizarMetas() {
+            const container = document.getElementById('goals-list-container');
+            container.innerHTML = '';
+
+            if (listaMetas.length === 0) {
+                container.innerHTML = `<div class="empty-goals">Nenhuma meta cadastrada para este mês. Comece adicionando uma acima!</div>`;
+                return;
+            }
+
+            listaMetas.forEach(meta => {
+                const item = document.createElement('div');
+                item.className = `goal-item ${meta.completed ? 'completed' : ''} ${meta.fav ? 'fav' : ''}`;
+                
+                item.innerHTML = `
+                    <div class="goal-left">
+                        <span class="goal-text">${meta.text}</span>
+                    </div>
+                    <div class="goal-actions">
+                        <button class="btn-goal-action check-btn" onclick="toggleConcluirMeta(${meta.id})" title="Marcar como concluída">✓</button>
+                        <button class="btn-goal-action fav-btn" onclick="toggleFavoritarMeta(${meta.id})" title="Favoritar meta">⭐</button>
+                        <button class="btn-goal-action delete-btn" onclick="excluirMeta(${meta.id})" title="Excluir meta">🗑</button>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function toggleConcluirMeta(id) {
+            listaMetas = listaMetas.map(m => m.id === id ? { ...m, completed: !m.completed } : m);
+            salvarEstado();
+            renderizarMetas();
+        }
+
+        function toggleFavoritarMeta(id) {
+            listaMetas = listaMetas.map(m => m.id === id ? { ...m, fav: !m.fav } : m);
+            salvarEstado();
+            renderizarMetas();
+        }
+
+        function excluirMeta(id) {
+            listaMetas = listaMetas.filter(m => m.id !== id);
+            salvarEstado();
+            renderizarMetas();
+            mostrarToast("🗑 Meta removida.");
         }
  
-        /* ========== SALVAR ESTADO (auto) ========== */
+        /* ========== SALVAMENTO DE ESTADO ========== */
         function salvarEstado() {
-            const dados = {};
+            const dados = JSON.parse(localStorage.getItem(storageKey()) || '{}');
+            
             document.querySelectorAll('.day-row').forEach(row => {
                 const key   = row.dataset.key;
                 const check = row.querySelector('.day-check');
                 const input = row.querySelector('.day-input');
+                const time  = row.querySelector('.day-time');
                 if (key) {
                     dados[key + '_check'] = check ? check.checked : false;
                     dados[key + '_val']   = input  ? input.value  : '';
+                    dados[key + '_time']  = time   ? time.value   : '';
                 }
             });
+
+            // Insere o array dinâmico de metas no objeto local de salvamento
+            dados['metas_interativas'] = listaMetas;
+
             localStorage.setItem(storageKey(), JSON.stringify(dados));
         }
  
-        /* ========== SALVAR (botão) ========== */
         function salvarTreinos() {
             salvarEstado();
-            mostrarToast('✅ Treinos salvos com sucesso!');
+            mostrarToast('💾 Todos os treinos e metas salvos com sucesso!');
         }
  
-        /* ========== LIMPAR ========== */
         function limparTreinos() {
-            if (!confirm('Tem certeza? Todos os treinos deste mês serão apagados.')) return;
+            if (!confirm('Deseja realmente limpar tudo o que foi feito este mês?')) return;
             localStorage.removeItem(storageKey());
+            listaMetas = [];
             renderizar();
-            mostrarToast('🗑 Treinos apagados.');
+            mostrarToast('🗑 Dados limpos.');
         }
  
-        /* ========== PROGRESSO ========== */
+        /* ========== FAIXA DE PROGRESSO ========== */
         function atualizarProgresso() {
             let total    = 0;
             let checked  = 0;
+            let maiorSequencia = 0;
+            let sequenciaAtual = 0;
  
             for (let s = 1; s <= NUM_SEMANAS; s++) {
                 let wChecked = 0;
                 document.querySelectorAll(`#days-${s} .day-row`).forEach(row => {
                     const isRest = row.classList.contains('rest');
                     if (!isRest) total++;
+                    
                     const cb = row.querySelector('.day-check');
-                    if (cb && cb.checked && !isRest) { checked++; wChecked++; }
+                    if (cb && cb.checked) {
+                        if (!isRest) { checked++; wChecked++; }
+                        sequenciaAtual++;
+                        if (sequenciaAtual > maiorSequencia) maiorSequencia = sequenciaAtual;
+                    } else {
+                        if (!isRest) sequenciaAtual = 0; 
+                    }
                 });
                 const wSpan = document.getElementById(`wcount-${s}`);
                 if (wSpan) wSpan.textContent = wChecked;
@@ -622,9 +968,28 @@ Calendario · HTML
             const pct = total > 0 ? Math.round((checked / total) * 100) : 0;
             document.getElementById('progress-fill').style.width = pct + '%';
             document.getElementById('progresso-texto').textContent = `${checked} / ${total} dias concluídos`;
+            document.getElementById('freq-badge').textContent = `🔥 Maior Frequência: ${maiorSequencia} dias seguidos`;
         }
  
-        /* ========== NAVEGAÇÃO DE MÊS ========== */
+        /* ========== NOTIFICAÇÕES ========== */
+        function configurarLembrete() {
+            if (!("Notification" in window)) {
+                alert("Navegador não suporta notificações de alerta.");
+                return;
+            }
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    mostrarToast("🔔 Notificações ativadas!");
+                    setTimeout(() => {
+                        new Notification("AdaptMove Planner", {
+                            body: "Hora de quebrar recordes e verificar suas metas de hoje!",
+                            icon: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=100"
+                        });
+                    }, 2000);
+                }
+            });
+        }
+
         function mudarMes(delta) {
             mesAtual += delta;
             if (mesAtual > 11) { mesAtual = 0;  anoAtual++; }
@@ -632,7 +997,6 @@ Calendario · HTML
             renderizar();
         }
  
-        /* ========== TOAST ========== */
         function mostrarToast(msg) {
             const t = document.getElementById('toast');
             t.textContent = msg;
@@ -640,7 +1004,6 @@ Calendario · HTML
             setTimeout(() => t.classList.remove('show'), 2800);
         }
  
-        /* ========== INIT ========== */
         renderizar();
     </script>
 </body>
