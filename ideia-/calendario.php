@@ -34,939 +34,315 @@
             color: var(--text);
             font-family: 'Inter', sans-serif;
             line-height: 1.6;
-            overflow-x: hidden;
-            transition: background 0.3s, color 0.3s;
+            padding-bottom: 60px;
         }
- 
-        /* ── ALTO CONTRASTE ── */
+
+        /* ACESSIBILIDADE */
         body.alto-contraste {
-            --bg: #000; --bg2: #000; --bg3: #111;
-            --accent: #ffff00; --accent2: #ffff00;
-            --text: #ffff00; --muted: #fff; --border: #ffff00;
+            --bg: #000; --bg2: #000; --bg3: #000;
+            --accent: #ffff00; --text: #ffff00; --muted: #fff; --border: #ffff00;
         }
-        body.alto-contraste * { border-color: #ffff00 !important; }
-        body.alto-contraste .week-card  { box-shadow: none !important; }
-        body.alto-contraste .day input[type="text"], 
-        body.alto-contraste .day-time,
-        body.alto-contraste .goal-input-field {
-            background: #000 !important;
-            color: #ffff00 !important;
-        }
-        body.alto-contraste input::placeholder { color: #aaaa00 !important; }
-        body.alto-contraste .week-title { background: #ffff00 !important; color: #000 !important; }
-        body.alto-contraste .progress-fill { background: #ffff00 !important; }
-        body.alto-contraste .btn-save, body.alto-contraste .btn-reminders, body.alto-contraste .btn-action { background: #ffff00 !important; color: #000 !important; }
- 
-        /* ── FONTE ACESSÍVEL ── */
         body.fonte-dislexia, body.fonte-dislexia * {
             font-family: Arial, sans-serif !important;
-            letter-spacing: 0.05em !important;
-            word-spacing: 0.1em !important;
-            line-height: 1.9 !important;
+            letter-spacing: 0.04em !important;
+            line-height: 1.8 !important;
         }
- 
-        /* ── BARRA DE ACESSIBILIDADE ── */
+
         .a11y-bar {
-            background: #000;
-            padding: 6px 5%;
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
+            background: #000; padding: 6px 5%; display: flex; justify-content: flex-end; gap: 10px;
             border-bottom: 1px solid var(--border);
         }
         .a11y-bar button {
-            background: transparent;
-            border: 1px solid var(--accent);
-            color: var(--accent);
-            padding: 4px 14px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.78rem;
-            font-family: 'Inter', sans-serif;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            transition: all 0.2s;
+            background: transparent; border: 1px solid var(--accent); color: var(--accent);
+            padding: 4px 14px; border-radius: 20px; cursor: pointer; font-size: 0.78rem; font-weight: 600;
         }
-        .a11y-bar button:hover { background: var(--accent); color: #000; }
  
-        /* ── HEADER ── */
         header {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: rgba(12,12,15,0.92);
-            backdrop-filter: blur(20px);
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(12,12,15,0.92); backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            display: flex; align-items: center; justify-content: space-between;
             padding: 18px 5%;
         }
-        .logo {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 2rem;
-            letter-spacing: 2px;
-            color: var(--text);
-            text-decoration: none;
-        }
+        .logo { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: var(--text); text-decoration:none;}
         .logo span { color: var(--accent); }
- 
         nav ul { display: flex; list-style: none; gap: 30px; }
-        nav a {
-            color: var(--muted);
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: color 0.2s;
-            position: relative;
-        }
-        nav a::after {
-            content: '';
-            position: absolute;
-            bottom: -3px; left: 0;
-            width: 0; height: 2px;
-            background: var(--accent);
-            transition: width 0.3s;
-        }
-        nav a:hover { color: var(--text); }
-        nav a:hover::after { width: 100%; }
-        nav a.active { color: var(--accent); }
-        nav a.active::after { width: 100%; }
+        nav a { color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; }
+        nav a:hover, nav a.active { color: var(--text); }
  
-        /* ── HERO DO CALENDÁRIO ── */
-        .planner-hero {
-            padding: 60px 5% 30px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        .planner-hero::before {
-            content: '';
-            position: absolute; inset: 0;
-            background:
-                radial-gradient(ellipse 70% 80% at 50% 110%, rgba(0,229,255,0.07) 0%, transparent 60%),
-                radial-gradient(ellipse 40% 40% at 80% 10%, rgba(123,47,255,0.08) 0%, transparent 50%);
-            pointer-events: none;
-        }
-        .section-label {
-            display: inline-block;
-            background: rgba(0,229,255,0.08);
-            border: 1px solid rgba(0,229,255,0.25);
-            color: var(--accent);
-            font-size: 0.72rem;
-            font-weight: 700;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            padding: 5px 16px;
-            border-radius: 30px;
-            margin-bottom: 20px;
-        }
-        .planner-hero h1 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(2.5rem, 6vw, 4.5rem);
-            letter-spacing: 3px;
-            margin-bottom: 12px;
-            line-height: 1;
-        }
-        .planner-hero p {
-            color: var(--muted);
-            font-size: 1rem;
-            max-width: 520px;
-            margin: 0 auto 20px;
-        }
-
-        /* ── CONTROLES EXTRA ── */
-        .extra-controls {
-            display: flex;
-            max-width: 700px;
-            margin: 0 auto 25px;
-            padding: 0 5%;
-            gap: 12px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .frequency-badge {
-            background: rgba(123, 47, 255, 0.1);
-            border: 1px solid rgba(123, 47, 255, 0.3);
-            color: #bfa3ff;
-            padding: 10px 20px;
-            border-radius: 12px;
-            font-size: 0.88rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .btn-reminders {
-            background: rgba(0, 229, 255, 0.1);
-            border: 1px solid rgba(0, 229, 255, 0.3);
-            color: var(--accent);
-            padding: 10px 20px;
-            border-radius: 12px;
-            font-size: 0.88rem;
-            font-weight: 600;
-            cursor: pointer;
-            font-family: 'Inter', sans-serif;
-            transition: all 0.2s;
-        }
-        .btn-reminders:hover { background: var(--accent); color: #000; }
-
-        /* BOTÃO DE DIRECIONAMENTO PARA METAS */
-        .btn-action {
-            background: linear-gradient(90deg, var(--accent), var(--accent2));
-            color: #000;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 0.9rem;
-            cursor: pointer;
-            font-family: 'Inter', sans-serif;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 15px rgba(0, 229, 255, 0.2);
-        }
-        .btn-action:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 229, 255, 0.4);
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
         }
  
-        /* ── CONTROLES DO PLANNER ── */
-        .planner-controls {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 16px;
-            flex-wrap: wrap;
+        .top-banner {
+            background: linear-gradient(135deg, var(--bg2) 0%, #171724 100%);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 30px;
             margin-bottom: 40px;
-        }
-        .month-nav {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: var(--bg2);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 8px 16px;
-        }
-        .month-nav button {
-            background: transparent;
-            border: none;
-            color: var(--muted);
-            font-size: 1.2rem;
-            cursor: pointer;
-            padding: 4px 8px;
-            border-radius: 6px;
-            transition: all 0.2s;
-            font-family: 'Inter', sans-serif;
-        }
-        .month-nav button:hover { color: var(--accent); background: rgba(0,229,255,0.08); }
-        #mes-atual {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.4rem;
-            letter-spacing: 2px;
-            color: var(--text);
-            min-width: 180px;
-            text-align: center;
-        }
-        .btn-save {
-            background: var(--accent);
-            color: #000;
-            border: none;
-            padding: 10px 24px;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 0.88rem;
-            cursor: pointer;
-            letter-spacing: 0.5px;
-            transition: all 0.3s;
-            font-family: 'Inter', sans-serif;
-        }
-        .btn-save:hover { box-shadow: 0 0 20px rgba(0,229,255,0.4); transform: translateY(-1px); }
-        .btn-clear {
-            background: transparent;
-            color: var(--muted);
-            border: 1px solid var(--border);
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.88rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-family: 'Inter', sans-serif;
-        }
-        .btn-clear:hover { border-color: #ff4444; color: #ff4444; }
- 
-        /* ── PROGRESSO MENSAL ── */
-        .progress-section {
-            max-width: 700px;
-            margin: 0 auto 50px;
-            padding: 0 5%;
-        }
-        .progress-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 20px;
         }
-        .progress-header span { font-size: 0.85rem; color: var(--muted); font-weight: 500; }
-        .progress-header strong { color: var(--accent); font-size: 1rem; }
-        .progress-bar {
-            width: 100%;
-            height: 6px;
-            background: var(--bg3);
-            border-radius: 99px;
-            overflow: hidden;
+        .top-banner h1 { font-family: 'Bebas Neue', sans-serif; font-size: 2.8rem; letter-spacing: 0.5px; }
+        .top-banner p { color: var(--muted); font-size: 0.95rem; margin-top: 4px; }
+ 
+        /* PROGRESSO */
+        .progress-box {
+            background: rgba(0,0,0,0.2);
+            padding: 20px;
+            border-radius: 10px;
+            min-width: 280px;
             border: 1px solid var(--border);
         }
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent), var(--accent2));
-            border-radius: 99px;
-            transition: width 0.5s ease;
-        }
+        .progress-header { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 8px; }
+        .progress-bar { width: 100%; height: 8px; background: var(--bg3); border-radius: 4px; overflow: hidden; }
+        .progress-fill { width: 0%; height: 100%; background: var(--accent); transition: width 0.4s ease; }
  
-        /* ── GRID DE SEMANAS ── */
+        /* GRID DE SEMANAS */
         .weeks-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 24px;
-            padding: 0 5% 40px;
-            max-width: 1400px;
-            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
         }
- 
-        /* ── CARD DE SEMANA ── */
         .week-card {
             background: var(--bg2);
             border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 24px;
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
-        .week-card:hover {
-            border-color: rgba(0,229,255,0.3);
-            box-shadow: 0 8px 30px rgba(0,229,255,0.06);
+            border-radius: 12px;
+            overflow: hidden;
         }
         .week-header {
+            background: rgba(255,255,255,0.02);
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .week-header h2 { font-size: 1.1rem; font-weight: 600; color: var(--accent); }
+        .week-counter { font-size: 0.85rem; color: var(--muted); }
+ 
+        .days-list { padding: 10px 20px; }
+        .day-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 22px;
-        }
-        .week-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1rem;
-            letter-spacing: 2px;
-            background: rgba(0,229,255,0.1);
-            border: 1px solid rgba(0,229,255,0.25);
-            color: var(--accent);
-            padding: 5px 14px;
-            border-radius: 20px;
-        }
-        .week-progress {
-            font-size: 0.78rem;
-            color: var(--muted);
-            font-weight: 500;
-        }
-        .week-progress span { color: var(--accent); font-weight: 700; }
- 
-        /* ── ESTRUTURA DOS DIAS ── */
-        .day-row {
-            display: grid;
-            grid-template-columns: auto 100px 75px 1fr;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 0;
-            border-bottom: 1px solid var(--border);
+            padding: 14px 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
         }
         .day-row:last-child { border-bottom: none; }
-        .day-row.done .day-name { text-decoration: line-through; color: var(--muted); }
-        .day-row.rest { opacity: 0.6; }
-        .day-row.rest .rest-badge { grid-column: span 2; }
+        
+        .day-meta { display: flex; align-items: center; gap: 16px; }
+        .day-name { font-weight: 600; font-size: 0.9rem; width: 80px; text-transform: uppercase; color: var(--muted); }
+        .day-row.completed .day-name { color: var(--success); }
+        
+        .workout-title { font-size: 0.95rem; color: var(--text); }
+        .day-row.completed .workout-title { color: var(--muted); text-decoration: line-through; }
  
+        /* CONTROLES */
+        .checkbox-wrapper {
+            position: relative;
+            width: 24px;
+            height: 24px;
+        }
         .day-check {
-            width: 18px;
-            height: 18px;
-            accent-color: var(--accent);
-            cursor: pointer;
+            width: 100%; height: 100%;
+            cursor: pointer; opacity: 0;
+            position: absolute; inset:0; z-index: 2;
         }
-        .day-name {
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--text);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .day-time {
-            background: var(--bg3);
-            border: 1px solid var(--border);
-            color: var(--text);
+        .custom-box {
+            position: absolute; inset:0;
+            border: 2px solid var(--border);
             border-radius: 6px;
-            padding: 4px 6px;
-            font-size: 0.78rem;
-            font-family: 'Inter', sans-serif;
-            outline: none;
-            width: 100%;
-            text-align: center;
-        }
-        .day-time:focus { border-color: var(--accent); }
-
-        .day-input {
-            background: var(--bg3);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 7px 12px;
-            color: var(--text);
-            font-size: 0.85rem;
-            font-family: 'Inter', sans-serif;
-            outline: none;
-            width: 100%;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-        .day-input::placeholder { color: var(--muted); font-size: 0.8rem; }
-        .day-input:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(0,229,255,0.1);
-        }
-        .rest-badge {
-            font-size: 0.72rem;
-            font-weight: 700;
-            letter-spacing: 1px;
-            color: var(--muted);
-            background: var(--bg3);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 5px 10px;
-            text-transform: uppercase;
-            text-align: center;
-            width: 100%;
-        }
-
-        /* ── ÁREA DE METAS DINÂMICAS ── */
-        .planning-section {
-            max-width: 1400px;
-            margin: 20px auto 80px;
-            padding: 0 5%;
-            scroll-margin-top: 100px;
-        }
-        .planning-card {
-            background: linear-gradient(135deg, var(--bg2) 0%, #171724 100%);
-            border: 1px solid rgba(0, 229, 255, 0.15);
-            border-radius: 24px;
-            padding: 35px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-        }
-        .planning-header-block {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-            gap: 15px;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 15px;
-        }
-        .planning-card h2 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 2.2rem;
-            letter-spacing: 1px;
-            color: var(--accent);
-        }
-
-        /* INPUT DE ADICIONAR META */
-        .goal-input-container {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-        }
-        .goal-input-field {
-            flex: 1;
-            background: var(--bg3);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 14px 20px;
-            color: var(--text);
-            font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
-            outline: none;
             transition: all 0.2s;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.75rem; color: transparent;
+            background: var(--bg3);
         }
-        .goal-input-field:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 10px rgba(0, 229, 255, 0.1);
-        }
-        .btn-add-goal {
-            background: var(--accent);
+        .day-check:checked + .custom-box {
+            background: var(--success);
+            border-color: var(--success);
             color: #000;
-            border: none;
-            padding: 0 24px;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 0.9rem;
-            cursor: pointer;
-            font-family: 'Inter', sans-serif;
-            transition: all 0.2s;
-        }
-        .btn-add-goal:hover { opacity: 0.9; transform: translateY(-1px); }
-
-        /* LISTA DE METAS ADICIONADAS */
-        .goals-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            max-height: 400px;
-            overflow-y: auto;
-            padding-right: 5px;
-        }
-        .goals-list::-webkit-scrollbar { width: 6px; }
-        .goals-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
-
-        .goal-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--border);
-            padding: 14px 20px;
-            border-radius: 14px;
-            transition: all 0.2s;
-        }
-        .goal-item:hover {
-            background: rgba(255, 255, 255, 0.04);
-            border-color: rgba(0, 229, 255, 0.15);
-        }
-        .goal-item.completed {
-            border-color: rgba(0, 230, 118, 0.3);
-            background: rgba(0, 230, 118, 0.02);
-        }
-        .goal-item.completed .goal-text {
-            text-decoration: line-through;
-            color: var(--muted);
-        }
-        .goal-item.fav {
-            border-color: rgba(255, 214, 0, 0.3);
-            background: rgba(255, 214, 0, 0.01);
-            order: -1; /* Joga os favoritos para o topo da lista */
-        }
-
-        .goal-left {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            flex: 1;
-        }
-        .goal-text {
-            font-size: 0.95rem;
-            color: var(--text);
-            font-weight: 500;
-            word-break: break-word;
-        }
-        .goal-actions {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .btn-goal-action {
-            background: var(--bg3);
-            border: 1px solid var(--border);
-            color: var(--muted);
-            width: 34px;
-            height: 34px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 0.9rem;
-        }
-        .btn-goal-action:hover { color: var(--text); border-color: var(--muted); }
-        .btn-goal-action.check-btn:hover, .goal-item.completed .check-btn { color: var(--success); border-color: var(--success); background: rgba(0, 230, 118, 0.1); }
-        .btn-goal-action.fav-btn:hover, .goal-item.fav .fav-btn { color: var(--favorite); border-color: var(--favorite); background: rgba(255, 214, 0, 0.1); }
-        .btn-goal-action.delete-btn:hover { color: #ff4444; border-color: #ff4444; background: rgba(255, 68, 68, 0.1); }
-
-        .empty-goals {
-            text-align: center;
-            color: var(--muted);
-            font-size: 0.9rem;
-            padding: 30px 0;
         }
  
-        /* ── TOAST ── */
+        /* TOAST NOTIFICAÇÃO */
         .toast {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: var(--bg2);
-            border: 1px solid var(--accent);
-            color: var(--text);
-            padding: 14px 22px;
-            border-radius: 10px;
-            font-size: 0.88rem;
-            font-weight: 600;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.4);
-            transform: translateY(80px);
-            opacity: 0;
-            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-            z-index: 999;
+            position: fixed; bottom: 30px; right: 30px;
+            background: var(--accent2); color: #fff;
+            padding: 14px 24px; border-radius: 8px;
+            font-size: 0.9rem; font-weight: 600;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transform: translateY(100px); opacity: 0;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1000;
         }
         .toast.show { transform: translateY(0); opacity: 1; }
- 
-        /* ── FOOTER ── */
-        footer {
-            background: #000;
-            border-top: 1px solid var(--border);
-            padding: 36px 5%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-        footer .logo { font-size: 1.4rem; }
-        footer p { color: var(--muted); font-size: 0.85rem; }
- 
-        /* ── RESPONSIVO ── */
-        @media (max-width: 768px) {
-            nav ul { gap: 14px; }
-            nav a  { font-size: 0.8rem; }
-            .weeks-grid { grid-template-columns: 1fr; padding: 0 4% 40px; }
-            .day-row {
-                grid-template-columns: auto 75px 65px 1fr;
-                gap: 6px;
-            }
-            .day-name { font-size: 0.75rem; width: auto; }
-            .day-time { font-size: 0.72rem; padding: 4px; }
-            .day-input { font-size: 0.8rem; padding: 6px 10px; }
-            footer { flex-direction: column; text-align: center; }
-            .planner-controls { gap: 10px; }
-            .planning-header-block { flex-direction: column; align-items: flex-start; }
-            .goal-input-container { flex-direction: column; }
-            .btn-add-goal { padding: 12px; }
-        }
     </style>
 </head>
 <body>
- 
+
     <div class="a11y-bar">
         <button onclick="alterarFonte()">Fonte Acessível</button>
         <button onclick="alterarContraste()">Alto Contraste</button>
     </div>
+
     <header>
-        <div class="logo">Adapt<span>Move</span></div>
+        <a class="logo" href="inde.php">Adapt<span>Move</span></a>
         <nav>
             <ul>
                 <li><a href="inde.php">Início</a></li>
-                <li><a href="#sobre">Sobre Nós</a></li>
+                <li><a href="inde.php#sobre">Sobre Nós</a></li>
                 <li><a href="proficionais.php">Mapa</a></li>
-                <li><a href="recomendados.php" class="active">Recomendados</a></li>
-                <li><a href="calendario.php">Calendário</a></li>
+                <li><a href="recomendados.php">Recomendados</a></li>
+                <li><a href="calendario.php" class="active">Calendário</a></li>
                 <li><a href="proficionais.php">Profissionais</a></li>
             </ul>
         </nav>
     </header>
-
-    <section class="planner-hero">
-        <div class="section-label">Organização</div>
-        <h1>Planner de Treino</h1>
-        <p>Planeje seu mês, marque os dias concluídos e acompanhe sua evolução semana a semana.</p>
-    </section>
-
-    <div class="extra-controls">
-        <div class="frequency-badge" id="freq-badge">
-            🔥 Maior Frequência: 0 dias seguidos
-        </div>
-        <button class="btn-reminders" onclick="configurarLembrete()">🔔 Ativar Lembretes</button>
-        <button class="btn-action" onclick="irParaMetas()">🎯 Ver Quadro de Metas</button>
-    </div>
  
-    <div class="planner-controls">
-        <div class="month-nav">
-            <button onclick="mudarMes(-1)" title="Mês anterior">&#8592;</button>
-            <span id="mes-atual">ABRIL 2025</span>
-            <button onclick="mudarMes(1)" title="Próximo mês">&#8594;</button>
-        </div>
-        <button class="btn-save" onclick="salvarTreinos()">💾 Salvar Tudo</button>
-        <button class="btn-clear" onclick="limparTreinos()">🗑 Limpar Mês</button>
-    </div>
- 
-    <div class="progress-section">
-        <div class="progress-header">
-            <span>Progresso do mês</span>
-            <strong id="progresso-texto">0 / 24 dias concluídos</strong>
-        </div>
-        <div class="progress-bar">
-            <div class="progress-fill" id="progress-fill" style="width:0%"></div>
-        </div>
-    </div>
- 
-    <div class="weeks-grid" id="weeks-grid">
-        </div>
-
-    <div class="planning-section" id="area-metas">
-        <div class="planning-card">
-            <div class="planning-header-block">
-                <h2>🎯 Minhas Metas a Bater</h2>
-                <span style="color: var(--muted); font-size: 0.85rem;">Adicione, favorite ou conclua seus desafios mensais</span>
+    <div class="container">
+        <div class="top-banner">
+            <div>
+                <h1>Meu Cronograma Adaptado</h1>
+                <p>Acompanhe sua regularidade marcial e gerencie suas metas semanais de mobilidade.</p>
+                <button onclick="configurarLembrete()" style="margin-top:14px; background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.8rem;">🔔 Ativar Lembrete</button>
             </div>
-            
-            <div class="goal-input-container">
-                <input type="text" id="new-goal-text" class="goal-input-field" placeholder="Ex: Fazer 4 dias de cardio na semana, aumentar carga do supino, beber 3L de água...">
-                <button class="btn-add-goal" onclick="adicionarMeta()">➕ Adicionar Meta</button>
-            </div>
-
-            <div class="goals-list" id="goals-list-container">
+            <div class="progress-box">
+                <div class="progress-header">
+                    <span>Progresso do Ciclo</span>
+                    <span id="progresso-texto">0 / 28 dias</span>
                 </div>
+                <div class="progress-bar">
+                    <div id="progress-fill" class="progress-fill"></div>
+                </div>
+            </div>
         </div>
+ 
+        <div id="weeks-container" class="weeks-grid">
+            </div>
     </div>
  
-    <div class="toast" id="toast"></div>
- 
-    <footer>
-        <div class="logo">Adapt<span>Move</span></div>
-        <p>&copy; <?php echo date('Y'); ?> AdaptMove — Movimento e Inclusão. Todos os direitos reservados.</p>
-    </footer>
+    <div id="toast" class="toast">🔔 Notificação de meta ativa!</div>
  
     <script>
-        /* ========== ACESSIBILIDADE ========== */
-        function alterarFonte() { document.body.classList.toggle('fonte-dislexia'); }
-        function alterarContraste() { document.body.classList.toggle('alto-contraste'); }
-
-        /* ========== ROLAGEM SUAVE ========== */
-        function irParaMetas() {
-            document.getElementById('area-metas').scrollIntoView({ behavior: 'smooth' });
-        }
- 
-        /* ========== DADOS ========== */
-        const DIAS = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
-        const MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+        // Lógica de Renderização do Planner mantida no escopo local
         const NUM_SEMANAS = 4;
+        const ROTINA_BASE = [
+            "Mobilidade Articular Ativa + Alongamento Estático Guiado",
+            "Técnicas de Alavancas Básicas (Solo/Bancada)",
+            "Descanso Ativo (Exercícios Respiratórios / Meditação Zazen)",
+            "Treino Cardiovascular Marcial (Sombra/Manopla Adaptada)",
+            "Técnica Específica de Combate Clássico (Foco em Postura)",
+            "Simulação Tática Controlada / Sparring Adaptado",
+            "Descanso Integral / Regenerativo Completo"
+        ];
+        const DIAS_NOMES = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"];
  
-        let mesAtual  = new Date().getMonth();
-        let anoAtual  = new Date().getFullYear();
-        let listaMetas = []; 
+        function carregarDados() {
+            const salvo = localStorage.getItem('adaptmove_planner');
+            return salvo ? JSON.parse(salvo) : {};
+        }
  
-        function storageKey() { return `adaptmove_planner_${anoAtual}_${mesAtual}`; }
+        function salvarDado(diaId, status) {
+            const dados = carregarDados();
+            dados[diaId] = status;
+            localStorage.setItem('adaptmove_planner', JSON.stringify(dados));
+            atualizarProgresso();
+        }
  
-        /* ========== RENDERIZAR PLANNER COMPLETO ========== */
         function renderizar() {
-            document.getElementById('mes-atual').textContent = `${MESES[mesAtual].toUpperCase()} ${anoAtual}`;
- 
-            const grid = document.getElementById('weeks-grid');
-            grid.innerHTML = '';
- 
-            const dados = JSON.parse(localStorage.getItem(storageKey()) || '{}');
-
-            listaMetas = dados['metas_interativas'] || [];
-            renderizarMetas();
+            const container = document.getElementById('weeks-container');
+            const dadosSalvos = carregarDados();
+            let html = '';
  
             for (let s = 1; s <= NUM_SEMANAS; s++) {
-                const card = document.createElement('div');
-                card.className = 'week-card';
-                card.innerHTML = `
+                html += `
+                <div class="week-card" id="semana-${s}">
                     <div class="week-header">
-                        <span class="week-title">SEMANA ${s}</span>
-                        <span class="week-progress">Concluídos: <span id="wcount-${s}">0</span>/6</span>
+                        <h2>Semana ${s} — Evolução Contínua</h2>
+                        <span class="week-counter"><span id="wcount-${s}">0</span> de 7 concluídos</span>
                     </div>
-                    <div id="days-${s}"></div>
-                `;
-                grid.appendChild(card);
+                    <div class="days-list">`;
  
-                const container = document.getElementById(`days-${s}`);
-                DIAS.forEach((dia, i) => {
-                    const key   = `s${s}_d${i}`;
-                    const check = dados[key + '_check'] || false;
-                    const val   = dados[key + '_val']   || '';
-                    const time  = dados[key + '_time']  || '';
-                    const isRest = (i === 6);
+                for (let d = 0; d < 7; d++) {
+                    const diaId = `s${s}d${d}`;
+                    const checked = dadosSalvos[diaId] ? 'checked' : '';
+                    const classeConcluido = dadosSalvos[diaId] ? 'completed' : '';
  
-                    const row = document.createElement('div');
-                    row.className = 'day-row' + (isRest ? ' rest' : '') + (check ? ' done' : '');
-                    row.dataset.key = key;
- 
-                    if (isRest) {
-                        row.innerHTML = `
-                            <input type="checkbox" class="day-check" ${check ? 'checked' : ''} onchange="toggleDia(this)">
-                            <span class="day-name">${dia}</span>
-                            <div class="rest-badge">🛌 Descanso</div>
-                        `;
-                    } else {
-                        row.innerHTML = `
-                            <input type="checkbox" class="day-check" ${check ? 'checked' : ''} onchange="toggleDia(this)">
-                            <span class="day-name">${dia}</span>
-                            <input type="time" class="day-time" value="${time}" oninput="atualizarTime(this)" title="Horário">
-                            <input type="text" class="day-input" placeholder="Treino..." value="${val}" oninput="atualizarInput(this)">
-                        `;
-                    }
-                    container.appendChild(row);
-                });
-            }
- 
-            atualizarProgresso();
-        }
- 
-        function toggleDia(checkbox) {
-            const row = checkbox.closest('.day-row');
-            if (checkbox.checked) { row.classList.add('done'); } else { row.classList.remove('done'); }
-            salvarEstado();
-            atualizarProgresso();
-        }
- 
-        function atualizarInput(input) { salvarEstado(); }
-        function atualizarTime(timeInput) { salvarEstado(); }
-
-        /* ========== FUNÇÕES DO GERENCIADOR DE METAS ========== */
-        function adicionarMeta() {
-            const inputField = document.getElementById('new-goal-text');
-            const texto = inputField.value.trim();
-            
-            if (!texto) {
-                alert("Por favor, digite alguma meta antes de adicionar.");
-                return;
-            }
-
-            const novaMeta = {
-                id: Date.now(),
-                text: texto,
-                completed: false,
-                fav: false
-            };
-
-            listaMetas.push(novaMeta);
-            inputField.value = '';
-            salvarEstado();
-            renderizarMetas();
-            mostrarToast("🎯 Meta adicionada ao quadro!");
-        }
-
-        function renderizarMetas() {
-            const container = document.getElementById('goals-list-container');
-            container.innerHTML = '';
-
-            if (listaMetas.length === 0) {
-                container.innerHTML = `<div class="empty-goals">Nenhuma meta cadastrada para este mês. Comece adicionando uma acima!</div>`;
-                return;
-            }
-
-            listaMetas.forEach(meta => {
-                const item = document.createElement('div');
-                item.className = `goal-item ${meta.completed ? 'completed' : ''} ${meta.fav ? 'fav' : ''}`;
-                
-                item.innerHTML = `
-                    <div class="goal-left">
-                        <span class="goal-text">${meta.text}</span>
-                    </div>
-                    <div class="goal-actions">
-                        <button class="btn-goal-action check-btn" onclick="toggleConcluirMeta(${meta.id})" title="Marcar como concluída">✓</button>
-                        <button class="btn-goal-action fav-btn" onclick="toggleFavoritarMeta(${meta.id})" title="Favoritar meta">⭐</button>
-                        <button class="btn-goal-action delete-btn" onclick="excluirMeta(${meta.id})" title="Excluir meta">🗑</button>
-                    </div>
-                `;
-                container.appendChild(item);
-            });
-        }
-
-        function toggleConcluirMeta(id) {
-            listaMetas = listaMetas.map(m => m.id === id ? { ...m, completed: !m.completed } : m);
-            salvarEstado();
-            renderizarMetas();
-        }
-
-        function toggleFavoritarMeta(id) {
-            listaMetas = listaMetas.map(m => m.id === id ? { ...m, fav: !m.fav } : m);
-            salvarEstado();
-            renderizarMetas();
-        }
-
-        function excluirMeta(id) {
-            listaMetas = listaMetas.filter(m => m.id !== id);
-            salvarEstado();
-            renderizarMetas();
-            mostrarToast("🗑 Meta removida!");
-        }
-
-        /* ========== PERSISTÊNCIA E AUXILIARES ========== */
-        function salvarEstado() {
-            const dados = {};
-            dados['metas_interativas'] = listaMetas;
-
-            document.querySelectorAll('.day-row').forEach(row => {
-                const key = row.dataset.key;
-                const check = row.querySelector('.day-check').checked;
-                dados[key + '_check'] = check;
-
-                const input = row.querySelector('.day-input');
-                if(input) dados[key + '_val'] = input.value;
-
-                const time = row.querySelector('.day-time');
-                if(time) dados[key + '_time'] = time.value;
-            });
-
-            localStorage.setItem(storageKey(), JSON.stringify(dados));
-        }
-
-        function salvarTreinos() {
-            salvarEstado();
-            mostrarToast("💾 Alterações salvas localmente com sucesso!");
-        }
-
-        function limparTreinos() {
-            if(confirm("Tem certeza que deseja limpar todos os treinos e metas deste mês?")) {
-                localStorage.removeItem(storageKey());
-                renderizar();
-                mostrarToast("🗑 O mês foi resetado.");
-            }
-        }
-
-        function mudarMes(direcao) {
-            mesAtual += direcao;
-            if(mesAtual > 11) { mesAtual = 0; anoAtual++; }
-            if(mesAtual < 0) { mesAtual = 11; anoAtual--; }
-            renderizar();
-        }
-
-        function atualizarProgresso() {
-            let totalConcluidos = 0;
-            
-            for (let s = 1; s <= NUM_SEMANAS; s++) {
-                let semanaConcluidos = 0;
-                const container = document.getElementById(`days-${s}`);
-                if(container) {
-                    container.querySelectorAll('.day-row').forEach((row, idx) => {
-                        // Não conta o dia de descanso (índice 6) no progresso semanal de treinos ativos se preferir, ou conta tudo. Aqui mantido proporcional.
-                        if(row.querySelector('.day-check').checked) {
-                            semanaConcluidos++;
-                            totalConcluidos++;
-                        }
-                    });
-                    const wCount = document.getElementById(`wcount-${s}`);
-                    if(wCount) wCount.textContent = semanaConcluidos;
+                    html += `
+                    <div class="day-row ${classeConcluido}" id="row-${diaId}">
+                        <div class="day-meta">
+                            <span class="day-name">${DIAS_NOMES[d]}</span>
+                            <span class="workout-title">${ROTINA_BASE[d]}</span>
+                        </div>
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" class="day-check" id="${diaId}" ${checked} onchange="alternarDia('${diaId}')">
+                            <div class="custom-box">✓</div>
+                        </div>
+                    </div>`;
                 }
+ 
+                html += `</div></div>`;
             }
-
+ 
+            container.innerHTML = html;
+            atualizarProgresso();
+        }
+ 
+        function alternarDia(diaId) {
+            const checkbox = document.getElementById(diaId);
+            const linha = document.getElementById(`row-${diaId}`);
+            
+            if(checkbox.checked) {
+                linha.classList.add('completed');
+                salvarDado(diaId, true);
+                mostrarToast("🎉 Excelente! Treino marcado como concluído.");
+            } else {
+                linha.classList.remove('completed');
+                salvarDado(diaId, false);
+            }
+        }
+ 
+        function atualizarProgresso() {
+            const dados = carregarDados();
+            let totalConcluidos = 0;
+ 
+            for(let s = 1; s <= NUM_SEMANAS; s++) {
+                let semanaConcluidos = 0;
+                for(let d = 0; d < 7; d++) {
+                    if(dados[`s${s}d${d}`]) {
+                        semanaConcluidos++;
+                        totalConcluidos++;
+                    }
+                }
+                const wCount = document.getElementById(`wcount-${s}`);
+                if(wCount) wCount.textContent = semanaConcluidos;
+            }
+ 
             const totalDias = NUM_SEMANAS * 7; 
             const pct = (totalConcluidos / totalDias) * 100;
             
             document.getElementById('progresso-texto').textContent = `${totalConcluidos} / ${totalDias} dias concluídos`;
             document.getElementById('progress-fill').style.width = `${pct}%`;
         }
-
+ 
         function mostrarToast(msg) {
             const toast = document.getElementById('toast');
             toast.textContent = msg;
             toast.classList.add('show');
             setTimeout(() => { toast.classList.remove('show'); }, 3000);
         }
-
+ 
         function configurarLembrete() {
             mostrarToast("🔔 Lembretes ativados no navegador!");
         }
-
-        // Inicialização
+ 
         window.onload = renderizar;
     </script>
+    <script src="script.js"></script>
 </body>
 </html>

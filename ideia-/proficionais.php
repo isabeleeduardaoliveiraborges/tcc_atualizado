@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AdaptMove - Profissionais</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -22,436 +20,121 @@
             --border: rgba(255,255,255,0.07);
         }
 
-        html { scroll-behavior: smooth; }
-
         body {
             background: var(--bg);
             color: var(--text);
             font-family: 'Inter', sans-serif;
-            line-height: 1.6;
             overflow-x: hidden;
         }
 
+        /* ACESSIBILIDADE */
         body.alto-contraste {
             --bg: #000; --bg2: #000; --bg3: #000;
-            --accent: #ffff00; --accent2: #ffff00;
-            --text: #ffff00; --muted: #fff; --border: #ffff00;
+            --accent: #ffff00; --text: #ffff00; --muted: #fff; --border: #ffff00;
         }
-        body.alto-contraste * { border-color: #ffff00 !important; }
-
         body.fonte-dislexia, body.fonte-dislexia * {
             font-family: Arial, sans-serif !important;
             letter-spacing: 0.05em !important;
-            word-spacing: 0.1em !important;
-            line-height: 1.9 !important;
+            line-height: 1.8 !important;
         }
 
-        /* ── BARRA DE ACESSIBILIDADE ── */
         .a11y-bar {
-            background: #000;
-            padding: 6px 5%;
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
+            background: #000; padding: 6px 5%; display: flex; justify-content: flex-end; gap: 10px;
             border-bottom: 1px solid var(--border);
         }
         .a11y-bar button {
-            background: transparent;
-            border: 1px solid var(--accent);
-            color: var(--accent);
-            padding: 4px 14px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.78rem;
-            font-family: 'Inter', sans-serif;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            transition: all 0.2s;
+            background: transparent; border: 1px solid var(--accent); color: var(--accent);
+            padding: 4px 14px; border-radius: 20px; cursor: pointer; font-size: 0.78rem; font-weight: 600;
         }
-        .a11y-bar button:hover { background: var(--accent); color: #000; }
 
-        /* ── HEADER ── */
         header {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: rgba(12,12,15,0.92);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 18px 5%;
+            position: sticky; top: 0; z-index: 100; background: rgba(12,12,15,0.92);
+            backdrop-filter: blur(20px); border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between; padding: 18px 5%;
         }
-        .logo {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 2rem;
-            letter-spacing: 2px;
-            color: var(--text);
-            text-decoration: none;
-        }
+        .logo { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 2px; color: var(--text); }
         .logo span { color: var(--accent); }
         nav ul { display: flex; list-style: none; gap: 30px; }
-        nav a {
-            color: var(--muted);
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: color 0.2s;
-            position: relative;
-        }
-        nav a::after {
-            content: '';
-            position: absolute;
-            bottom: -3px; left: 0;
-            width: 0; height: 2px;
-            background: var(--accent);
-            transition: width 0.3s;
-        }
-        nav a:hover { color: var(--text); }
-        nav a:hover::after { width: 100%; }
-        nav a.active { color: var(--accent); }
-        nav a.active::after { width: 100%; }
+        nav a { color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; }
+        nav a.active, nav a:hover { color: var(--text); }
 
-        /* ── HERO MINI ── */
-        .page-hero {
-            padding: 80px 5% 60px;
-            text-align: center;
-            background:
-                radial-gradient(ellipse 60% 50% at 50% 100%, rgba(0,229,255,0.07) 0%, transparent 60%),
-                radial-gradient(ellipse 40% 30% at 20% 0%, rgba(123,47,255,0.08) 0%, transparent 50%);
-            border-bottom: 1px solid var(--border);
-        }
-        .page-hero .tag {
-            display: inline-block;
-            background: rgba(0,229,255,0.1);
-            border: 1px solid rgba(0,229,255,0.3);
-            color: var(--accent);
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            padding: 5px 16px;
-            border-radius: 30px;
-            margin-bottom: 20px;
-        }
-        .page-hero h1 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(2.5rem, 6vw, 4.5rem);
-            letter-spacing: 2px;
-            line-height: 1.0;
-            margin-bottom: 16px;
-        }
-        .page-hero p { color: var(--muted); font-size: 1.05rem; max-width: 600px; margin: 0 auto; }
+        main { padding: 60px 5%; max-width: 1400px; margin: 0 auto; }
+        .page-title { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; margin-bottom: 40px; letter-spacing: 1px; }
 
-        /* ── SEÇÃO OBJETIVO ── */
-        .objetivo-section {
-            padding: 60px 5% 20px;
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-        .objetivo-container {
-            background: linear-gradient(135deg, var(--bg2), rgba(19, 19, 26, 0.6));
-            border: 1px solid var(--border);
-            padding: 40px;
-            border-radius: 24px;
+        .layout-grid {
             display: grid;
-            grid-template-columns: 280px 1fr;
+            grid-template-columns: 1fr 1fr;
             gap: 40px;
-            align-items: center;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-        }
-        .objetivo-badge {
-            text-align: left;
-            border-right: 2px solid var(--accent);
-            padding-right: 20px;
-        }
-        .objetivo-badge h2 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 2.8rem;
-            line-height: 1.1;
-            color: var(--text);
-            letter-spacing: 1px;
-        }
-        .objetivo-badge h2 span { color: var(--accent); }
-        .objetivo-text p {
-            color: #d1d1d6;
-            font-size: 1.1rem;
-            line-height: 1.7;
-            text-align: justify;
+            align-items: start;
         }
 
-        /* ── GRID DE PROFISSIONAIS ── */
-        .prof-section {
-            padding: 40px 5% 80px;
-        }
-        .category-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 2.2rem;
-            letter-spacing: 1px;
-            margin: 40px auto 20px;
-            max-width: 1100px;
-            color: var(--text);
-            border-left: 4px solid var(--accent2);
-            padding-left: 15px;
-        }
-        .edu-fisica-title { border-left-color: var(--accent); }
-        
-        .prof-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 30px;
-            max-width: 1100px;
-            margin: 0 auto 40px;
-        }
-
-        .card {
-            background: var(--bg2);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 35px 28px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.35s cubic-bezier(0.165, 0.84, 0.44, 1);
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--accent), var(--accent2));
-            transform: scaleX(0);
-            transition: transform 0.35s;
-            transform-origin: left;
-        }
-        .card:hover {
-            border-color: rgba(0,229,255,0.3);
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(0,229,255,0.1);
-        }
-        .card:hover::before { transform: scaleX(1); }
-
-        .foto-wrap {
-            width: 130px;
-            height: 130px;
-            border-radius: 50%;
-            overflow: hidden;
-            margin: 0 auto 20px;
-            border: 2px solid var(--border);
-            transition: border-color 0.35s;
-        }
-        .card:hover .foto-wrap { border-color: var(--accent); }
-        .foto-wrap img { width: 100%; height: 100%; object-fit: cover; }
-
-        .card h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 4px; color: var(--text); }
-        .card .cargo { font-size: 0.78rem; color: var(--accent); font-weight: 700; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
-        .card.martial .cargo { color: var(--accent2); }
-        .card .resumo-perfil { font-size: 0.9rem; color: #a0a0b0; margin-bottom: 24px; line-height: 1.5; text-align: center; }
-
-        .btn-modal {
-            background: rgba(255,255,255,0.03);
-            color: var(--text);
-            border: 1px solid var(--border);
-            padding: 12px 24px;
-            border-radius: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 0.88rem;
+        /* MAPA REAL */
+        #map {
             width: 100%;
-            font-family: 'Inter', sans-serif;
-            transition: all 0.2s;
-            margin-top: auto;
-        }
-        .card:hover .btn-modal {
-            background: var(--accent);
-            color: #000;
-            border-color: var(--accent);
-            box-shadow: 0 0 20px rgba(0,229,255,0.35);
-        }
-        .card.martial:hover .btn-modal {
-            background: var(--accent2);
-            color: #fff;
-            border-color: var(--accent2);
-            box-shadow: 0 0 20px rgba(123,47,255,0.35);
-        }
-
-        /* ── SEÇÃO DO MAPA FUNCIONAL ── */
-        .map-section {
-            padding: 80px 5%;
-            background: var(--bg2);
-            border-top: 1px solid var(--border);
-        }
-        .map-section .section-label {
-            display: inline-block;
-            background: rgba(0,229,255,0.1);
-            border: 1px solid rgba(0,229,255,0.3);
-            color: var(--accent);
-            font-size: 0.72rem;
-            font-weight: 700;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            padding: 5px 16px;
-            border-radius: 30px;
-            margin-bottom: 16px;
-        }
-        .map-section .section-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(2rem, 4vw, 3rem);
-            letter-spacing: 1px;
-            margin-bottom: 12px;
-        }
-        .map-section .section-sub {
-            color: var(--muted);
-            font-size: 0.95rem;
-            margin-bottom: 32px;
-        }
-        .filters {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 28px;
-        }
-        .filter-btn {
-            background: var(--bg3);
-            border: 1px solid var(--border);
-            color: var(--muted);
-            padding: 10px 22px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 0.88rem;
-            font-family: 'Inter', sans-serif;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-        .filter-btn:hover, .filter-btn.active {
-            border-color: var(--accent);
-            color: var(--accent);
-            background: rgba(0,229,255,0.08);
-        }
-        
-        #map-container {
-            width: 100%;
-            height: 480px;
-            background: var(--bg3);
+            height: 600px;
             border-radius: 16px;
             border: 1px solid var(--border);
-            position: relative;
-            overflow: hidden;
             z-index: 1;
         }
 
-        .leaflet-popup-content-wrapper {
-            background: #191924 !important;
-            color: #f0f0f5 !important;
-            border: 1px solid rgba(0,229,255,0.3);
-            border-radius: 12px !important;
-            font-family: 'Inter', sans-serif;
-        }
-        .leaflet-popup-tip {
-            background: #191924 !important;
-            border: 1px solid rgba(0,229,255,0.3);
-        }
-        .leaflet-popup-content h4 {
-            color: var(--accent);
-            font-size: 0.95rem;
-            margin-bottom: 4px;
-        }
-        .leaflet-popup-content p {
-            font-size: 0.82rem;
-            color: #a0a0b0;
-            line-height: 1.4;
-        }
-        .leaflet-layer {
-            filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
-        }
- 
-        /* ── MODAL ── */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+        /* LISTA PROFISSIONAIS */
+        .prof-list {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 999;
-            padding: 20px;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.35s ease;
-        }
-        .modal-overlay.active { opacity: 1; pointer-events: auto; }
-        .modal-box {
-            background: var(--bg2);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 24px;
-            width: 100%;
-            max-width: 820px;
-            max-height: 90vh;
+            flex-direction: column;
+            gap: 20px;
+            max-height: 600px;
             overflow-y: auto;
-            padding: 48px;
-            position: relative;
-            transform: scale(0.92) translateY(24px);
-            transition: transform 0.35s cubic-bezier(0.165, 0.84, 0.44, 1);
+            padding-right: 10px;
         }
-        .modal-overlay.active .modal-box { transform: scale(1) translateY(0); }
+        .prof-list::-webkit-scrollbar { width: 6px; }
+        .prof-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 
-        .modal-close {
-            position: absolute;
-            top: 20px; right: 24px;
-            background: var(--bg3);
+        .prof-card {
+            background: var(--bg2);
             border: 1px solid var(--border);
-            color: var(--muted);
-            width: 36px; height: 36px;
-            border-radius: 50%;
-            font-size: 1.1rem;
-            cursor: pointer;
+            border-radius: 12px;
+            padding: 20px;
             display: flex;
-            align-items: center;
-            justify-content: center;
+            gap: 20px;
+            cursor: pointer;
             transition: all 0.2s;
         }
-        .modal-close:hover { border-color: var(--accent); color: var(--accent); }
+        .prof-card:hover { border-color: var(--accent); background: var(--bg3); }
+        .prof-avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid var(--border); }
+        .prof-info h3 { font-size: 1.2rem; margin-bottom: 4px; }
+        .prof-tag { font-size: 0.8rem; color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .prof-desc { font-size: 0.9rem; color: var(--muted); margin-top: 8px; }
 
-        .modal-grid { display: grid; grid-template-columns: 200px 1fr; gap: 40px; align-items: start; }
-        .modal-left { text-align: center; }
-        .modal-foto { width: 160px; height: 160px; border-radius: 50%; overflow: hidden; margin: 0 auto 16px; border: 3px solid var(--accent); }
-        .modal-foto img { width: 100%; height: 100%; object-fit: cover; }
-        .modal-nome { font-size: 1.4rem; font-weight: 700; margin-bottom: 8px; color: var(--text); }
-        .modal-badge { display: inline-block; background: rgba(0,229,255,0.1); border: 1px solid rgba(0,229,255,0.3); color: var(--accent); font-size: 0.75rem; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
-
-        .modal-divider { width: 1px; background: var(--border); position: absolute; left: calc(200px + 20px + 24px); top: 48px; bottom: 48px; }
-        .modal-right { display: flex; flex-direction: column; gap: 20px; }
-        .info-row label { display: block; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--muted); margin-bottom: 6px; }
-        .info-row p { color: #d1d1d6; font-size: 0.97rem; }
-        .info-row .highlight { color: var(--accent); font-weight: 600; }
-        .info-row blockquote { border-left: 3px solid var(--accent2); padding: 10px 16px; background: rgba(123,47,255,0.03); border-radius: 0 8px 8px 0; color: #a0a0b0; font-style: italic; font-size: 0.95rem; }
-
-        .btn-wpp { display: flex; align-items: center; justify-content: center; gap: 10px; background: #25D366; color: #fff; padding: 14px 24px; border-radius: 12px; text-decoration: none; font-weight: 700; font-size: 0.95rem; transition: all 0.2s; margin-top: 8px; }
-        .btn-wpp:hover { background: #1ebe5d; box-shadow: 0 0 20px rgba(37,211,102,0.4); }
-
-        /* ── FOOTER ── */
-        footer { background: #000; border-top: 1px solid var(--border); padding: 40px 5%; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
-        footer p { color: var(--muted); font-size: 0.85rem; }
-
-        @media (max-width: 850px) {
-            .objetivo-container { grid-template-columns: 1fr; gap: 20px; }
-            .objetivo-badge { border-right: none; border-bottom: 2px solid var(--accent); padding-right: 0; padding-bottom: 15px; text-align: center; }
+        /* MODAL */
+        .modal {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; z-index: 200; transition: opacity 0.3s;
+            padding: 20px;
         }
-        @media (max-width: 680px) {
-            .modal-box { padding: 28px 20px; }
-            .modal-grid { grid-template-columns: 1fr; gap: 28px; }
-            .modal-divider { display: none; }
-            .modal-foto { width: 120px; height: 120px; }
-            nav ul { gap: 16px; }
-            nav a { font-size: 0.8rem; }
-            footer { flex-direction: column; text-align: center; }
+        .modal.active { opacity: 1; pointer-events: auto; }
+        .modal-content {
+            background: var(--bg2); border: 1px solid var(--border); width: 100%; max-width: 700px;
+            border-radius: 16px; padding: 40px; position: relative; max-height: 90vh; overflow-y: auto;
+        }
+        .modal-close { position: absolute; top: 20px; right: 20px; background: transparent; border: none; color: var(--muted); font-size: 1.5rem; cursor: pointer; }
+        .modal-header { display: flex; gap: 30px; margin-bottom: 30px; align-items: center; }
+        .modal-img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent); }
+        .modal-header-info h2 { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; letter-spacing: 1px; line-height: 1.1; }
+        
+        .modal-body { display: flex; flex-direction: column; gap: 24px; }
+        .info-group h4 { font-size: 0.8rem; text-transform: uppercase; color: var(--accent); letter-spacing: 1px; margin-bottom: 6px; }
+        .info-group p { font-size: 0.95rem; color: var(--text); line-height: 1.6; }
+        
+        .btn-wpp {
+            display: block; width: 100%; background: #25d366; color: #fff; text-align: center;
+            padding: 14px; border-radius: 8px; font-weight: 700; text-decoration: none; margin-top: 10px; transition: opacity 0.2s;
+        }
+        .btn-wpp:hover { opacity: 0.9; }
+
+        @media (max-width: 992px) {
+            .layout-grid { grid-template-columns: 1fr; }
+            #map { height: 350px; }
         }
     </style>
 </head>
@@ -461,344 +144,137 @@
         <button onclick="alterarFonte()">Fonte Acessível</button>
         <button onclick="alterarContraste()">Alto Contraste</button>
     </div>
-    
+
     <header>
         <div class="logo">Adapt<span>Move</span></div>
         <nav>
             <ul>
                 <li><a href="inde.php">Início</a></li>
-                <li><a href="#sobre">Sobre Nós</a></li>
-                <li><a href="proficionais.php">Mapa</a></li>
-                <li><a href="recomendados.php" class="active">Recomendados</a></li>
+                <li><a href="inde.php#sobre">Sobre Nós</a></li>
+                <li><a href="proficionais.php" class="active">Mapa</a></li>
+                <li><a href="recomendados.php">Recomendados</a></li>
                 <li><a href="calendario.php">Calendário</a></li>
                 <li><a href="proficionais.php">Profissionais</a></li>
             </ul>
         </nav>
     </header>
 
+    <main>
+        <h1 class="page-title">Rede Credenciada & Especialistas</h1>
+        
+        <div class="layout-grid">
+            <div id="map"></div>
 
-    <div class="page-hero">
-        <div class="tag">Corpo Docente</div>
-        <h1>Profissionais Qualificados</h1>
-        <p>Clique em qualquer card para conferir o perfil detalhado, especializações completas e a grade de horários dos nossos especialistas.</p>
-    </div>
-
-    <section class="objetivo-section">
-        <div class="objetivo-container">
-            <div class="objetivo-badge">
-                <h2>Ensino<span> Adaptado</span></h2>
-            </div>
-            <div class="objetivo-text">
-                <p>Nosso corpo profissional é rigorosamente selecionado e capacitado para atuar na intersecção entre a reabilitação física, a inclusão social e o alto rendimento esportivo. Reunimos especialistas que compreendem a fundo as particularidades biomecânicas, motoras e cognitivas de cada aluno. Através de metas individuais bem mapeadas, nossa equipe transforma o esporte e a atividade física em ferramentas palpáveis de autonomia e superação contínua.</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="prof-section">
-        <h2 class="category-title edu-fisica-title">Professores de Educação Física</h2>
-        <div class="prof-grid">
-            <div class="card" onclick="abrirModal(this)"
-                data-nome="Prof. André"
-                data-cargo="Prof. de Educação Física"
-                data-biografia="Graduado e pós-graduado em Atividade Motora Adaptada. Possui ampla bagagem na aplicação da cinesiologia como pilar fundamental para correção postural e fortalecimento de alunos com mobilidade reduzida."
-                data-especializacao="Cinesiologia Aplicada, Condicionamento Clínico e Biomecânica Adaptada"
-                data-whatsapp="5511999993333"
-                data-agendamento="Segunda a Sexta — das 08h às 12h"
-                data-metas="Melhorar em até 40% a flexibilidade funcional dos membros inferiores e consolidar o tônus muscular para ganho de estabilidade ergonômica."
-                data-estilo="Treinamentos com foco técnico refinado, respeito aos limites biológicos e adaptação ergonômica rigorosa."
-                data-foto="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=300&auto=format&fit=crop">
-                <div class="foto-wrap">
-                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=300&auto=format&fit=crop" alt="Prof. André">
-                </div>
-                <h3>Prof. André</h3>
-                <p class="cargo">Educação Física</p>
-                <p class="resumo-perfil">Especialista em cinesiologia e correção postural adaptada.</p>
-                <button class="btn-modal">🥊 Ver Perfil Completo</button>
-            </div>
-
-            <div class="card" onclick="abrirModal(this)"
-                data-nome="Profª. Mariana"
-                data-cargo="Profª. de Educação Física"
-                data-biografia="Especialista em Psicomotricidade e desenvolvimento neurodivergente. Atua há mais de 8 anos desenhando treinos dinâmicos e adaptados que estimulam simultaneamente as funções cognitivas e cardiorrespiratórias."
-                data-especializacao="Psicomotricidade Fina/Grossa e Atividade Física para TEA (Autismo)"
-                data-whatsapp="5511999995555"
-                data-agendamento="Segundas, Quartas e Sextas — das 13h às 17h"
-                data-metas="Otimizar a coordenação motora bilateral de forma lúdica e estruturar o foco atencional através de circuitos dinâmicos semanais."
-                data-estilo="Circuitos lúdicos e estimulantes estruturados para engajamento contínuo e desenvolvimento motor harmônico."
-                data-foto="https://img.magnific.com/fotos-premium/uma-mulher-de-negocios-elegante-e-confiante-a-sorrir_589812-528.jpg?semt=ais_hybrid&w=740&q=80">
-                <div class="foto-wrap">
-                    <img src="https://img.magnific.com/fotos-premium/uma-mulher-de-negocios-elegante-e-confiante-a-sorrir_589812-528.jpg?semt=ais_hybrid&w=740&q=80" alt="Profª Mariana">
-                </div>
-                <h3>Profª. Mariana</h3>
-                <p class="cargo">Educação Física</p>
-                <p class="resumo-perfil">Foco em psicomotricidade estruturada e suporte ao autismo.</p>
-                <button class="btn-modal">🥊 Ver Perfil Completo</button>
-            </div>
-
-            <div class="card" onclick="abrirModal(this)"
-                data-nome="Profª. Camila"
-                data-cargo="Profª. de Educação Física"
-                data-biografia="Mestre em Ciências da Saúde e atividade física voltada para a terceira idade e reabilitação cardiovascular. Desenvolve dinâmicas focadas em reabilitação de alta performance e ganho de independência física."
-                data-especializacao="Fisiologia do Exercício, Treino Funcional Resgatado e Hidroginástica Adaptada"
-                data-whatsapp="5511999997777"
-                data-agendamento="Terças e Quintas — das 08h às 11h30 e das 14h às 16h"
-                data-metas="Resgatar a independência motora diária, recuperar o tônus pós-trauma e aumentar a resistência cardiovascular de forma assistida."
-                data-estilo="Aulas focadas em ergonomia preventiva com acompanhamento detalhado de metas e evolução de carga."
-                data-foto="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=300&auto=format&fit=crop">
-                <div class="foto-wrap">
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=300&auto=format&fit=crop" alt="Profª Camila">
-                </div>
-                <h3>Profª. Camila</h3>
-                <p class="cargo">Educação Física</p>
-                <p class="resumo-perfil">Especialista em fisiologia do exercício e reabilitação motora funcional.</p>
-                <button class="btn-modal">🥊 Ver Perfil Completo</button>
-            </div>
-        </div>
-
-        <h2 class="category-title">Instrutores de Artes Marciais</h2>
-        <div class="prof-grid">
-            <div class="card martial" onclick="abrirModal(this)"
-                data-nome="Mestre Rafael"
-                data-cargo="Instrutor de Capoeira"
-                data-biografia="Com mais de 18 anos de tatame e vivência esportiva, desenvolveu metodologias rítmicas e de expressão corporal focadas na inserção e inclusão social através dos fundamentos da capoeira."
-                data-especializacao="Capoeira Adaptada, Ritmo Corporal e Consciência de Movimento"
-                data-whatsapp="5511999991111"
-                data-agendamento="Terças e Quintas — das 14h às 18h"
-                data-metas="Desenvolver o equilíbrio dinâmico e a agilidade de membros através da sincronia rítmica e da socialização comunitária."
-                data-estilo="Aulas altamente dinâmicas integrando musicalidade clássica, disciplina marcial e expressão livre."
-                data-foto="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=300&auto=format&fit=crop">
-                <div class="foto-wrap">
-                    <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=300&auto=format&fit=crop" alt="Mestre Rafael">
-                </div>
-                <h3>Mestre Rafael</h3>
-                <p class="cargo">Instrutor de Capoeira</p>
-                <p class="resumo-perfil">Desenvolvimento do ritmo, equilíbrio e expressão corporal adaptada.</p>
-                <button class="btn-modal">🥋 Ver Perfil Completo</button>
-            </div>
-
-            <div class="card martial" onclick="abrirModal(this)"
-                data-nome="Instrutor Carlos"
-                data-cargo="Instrutor de Krav Maga"
-                data-biografia="Especialista técnico em cenários de proteção tática, responsável pela quebra e reconstrução de técnicas de lutas urbanas e defesa pessoal voltada para PCDs e cadeirantes."
-                data-especializacao="Krav Maga de Contenção e Defesa Pessoal Urbana Adaptada"
-                data-whatsapp="5511999992222"
-                data-agendamento="Quartas e Sextas — das 19h às 21h"
-                data-metas="Garantir total autonomia tática em cenários urbanos simulados, acelerando o tempo de reação e fortalecendo o core para estabilização."
-                data-estilo="Treinamentos focados em autonomia, cenários reais de simulação e respostas rápidas e eficientes."
-                data-foto="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=300&auto=format&fit=crop">
-                <div class="foto-wrap">
-                    <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=300&auto=format&fit=crop" alt="Instrutor Carlos">
-                </div>
-                <h3>Instrutor Carlos</h3>
-                <p class="cargo">Instrutor de Krav Maga</p>
-                <p class="resumo-perfil">Especialista em defesa pessoal urbana e autonomia para cadeirantes.</p>
-                <button class="btn-modal">🥋 Ver Perfil Completo</button>
-            </div>
-
-            <div class="card martial" onclick="abrirModal(this)"
-                data-nome="Mestre Lucas"
-                data-cargo="Mestre de Para-Jiu-Jitsu"
-                data-biografia="Focado no mapeamento e desenvolvimento das alavancas mecânicas corporais. É pioneiro regional no ensino sistemático de lutas adaptadas de solo para amputados e atletas com paralisia cerebral."
-                data-especializacao="Para-Jiu-Jitsu Esportivo e Alavancas Mecânicas de Solo"
-                data-whatsapp="5511999994444"
-                data-agendamento="Sábados — das 09h às 12h"
-                data-metas="Dominar o controle de solo através de alavancas ergonômicas personalizadas e aprimorar a força isométrica pura."
-                data-estilo="Metodologia altamente técnica, com foco em xadrez de solo, alavancas e foco mental estruturado."
-                data-foto="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=300&auto=format&fit=crop">
-                <div class="foto-wrap">
-                    <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=300&auto=format&fit=crop" alt="Mestre Lucas">
-                </div>
-                <h3>Mestre Lucas</h3>
-                <p class="cargo">Mestre de Jiu Jitsu</p>
-                <p class="resumo-perfil">Especialista em Para-Jiu-Jitsu e alavancas mecânicas de solo.</p>
-                <button class="btn-modal">🥋 Ver Perfil Completo</button>
-            </div>
-        </div>
-    </section>
-
-    <section id="mapa" class="map-section">
-        <div class="section-label">Localização</div>
-        <h2 class="section-title">Encontre um Dojô Inclusivo</h2>
-        <p class="section-sub">Clique nos botões abaixo para ver os locais acessíveis no mapa dinâmico.</p>
-
-        <div class="filters">
-            <button class="filter-btn active" onclick="filtrar('cadeirante', this)">♿ Acessibilidade Física</button>
-            <button class="filter-btn" onclick="filtrar('mental', this)">🧠 Suporte Neurodivergente</button>
-            <button class="filter-btn" onclick="filtrar('jiujitsu', this)">🥋 Jiu-Jitsu</button>
-            <button class="filter-btn" onclick="filtrar('boxe', this)">🥊 Boxe / Muay Thai</button>
-        </div>
-
-        <div id="map-container"></div>
-    </section>
-
-    <div id="modal" class="modal-overlay">
-        <div class="modal-box">
-            <button class="modal-close" id="btn-fechar" title="Fechar">✕</button>
-            <div class="modal-grid">
-                <div class="modal-left">
-                    <div class="modal-foto">
-                        <img id="m-foto" src="" alt="">
-                    </div>
-                    <p class="modal-nome" id="m-nome"></p>
-                    <span class="modal-badge" id="m-cargo"></span>
-                </div>
+            <div class="prof-list">
                 
-                <div class="modal-divider"></div>
-
-                <div class="modal-right">
-                    <div class="info-row">
-                        <label>📖 Perfil Profissional / Biografia</label>
-                        <p id="m-biografia"></p>
-                    </div>
-                    <div class="info-row">
-                        <label>🎯 Especializações</label>
-                        <p id="m-especializacao" class="highlight"></p>
-                    </div>
-                    <div class="info-row">
-                        <label>⚡ Estilo de Aula</label>
-                        <blockquote id="m-estilo"></blockquote>
-                    </div>
-                    <div class="info-row">
-                        <label>🏅 Metas Principais a Bater</label>
-                        <p id="m-metas" style="color: var(--accent); font-weight: 500;"></p>
-                    </div>
-                    <div class="info-row">
-                        <label>📅 Agendamento de Aulas</label>
-                        <p id="m-agendamento" style="font-weight: 600; color: #fff;"></p>
-                    </div>
-                    <div class="info-row">
-                        <label>💬 Contato Direto</label>
-                        <a id="m-whatsapp" href="#" target="_blank" rel="noopener" class="btn-wpp">
-                            💬 Chamar no WhatsApp para Agendar
-                        </a>
+                <div class="prof-card card-click" 
+                     data-nome="Sensei Ricardo Silva" 
+                     data-cargo="Faixa Preta 4º Dan — Especialista em Para-Jiu-Jitsu"
+                     data-biografia="Mais de 15 anos de experiência no ensino de artes marciais adaptadas. Fundador do projeto Tatame para Todos, focado no desenvolvimento de atletas cadeirantes e amputados."
+                     data-especializacao="Adaptação de alavancas para membros superiores/inferiores comprometidos."
+                     data-estilo="Foco na paciência, técnica pura e repetição guiada por toque táctil."
+                     data-metas="Levar 3 atletas para o próximo circuito internacional de Para-Jiu-Jitsu."
+                     data-agendamento="Terças e Quintas: 14h às 17h. Sábados: 09h às 11h."
+                     data-foto="https://images.unsplash.com/photo-1537368910025-700350fe46c7?q=80&w=300"
+                     data-whatsapp="5511999999999">
+                    <img class="prof-avatar" src="https://images.unsplash.com/photo-1537368910025-700350fe46c7?q=80&w=300" alt="Ricardo Silva">
+                    <div class="prof-info">
+                        <span class="prof-tag">Jiu-Jitsu Adaptado</span>
+                        <h3>Sensei Ricardo Silva</h3>
+                        <p class="prof-desc">Especializado em adaptação mecânica de alavancas para cadeirantes.</p>
                     </div>
                 </div>
+
+                <div class="prof-card card-click" 
+                     data-nome="Dra. Aline Mendes" 
+                     data-cargo="Psicopedagoga & Instrutora de Karatê Inclusivo"
+                     data-biografia="Aline une conceitos de neuropsicologia aplicada ao esporte com os katas tradicionais do Karatê para aperfeiçoar foco, regulação emocional e tônus muscular de crianças e adultos neurodivergentes."
+                     data-especializacao="Intervenções motoras para TEA (Autismo), TDAH e Síndrome de Down."
+                     data-estilo="Instruções visuais lúdicas, reforço positivo imediato e controle sensorial de ambiente."
+                     data-metas="Expandir turmas de inclusão infantil para mais 4 dojôs parceiros este ano."
+                     data-agendamento="Segundas e Quartas: 08h às 12h. Sextas: 14h às 18h."
+                     data-foto="https://images.unsplash.com/photo-1594824813573-246434e3b96f?q=80&w=300"
+                     data-whatsapp="5511988888888">
+                    <img class="prof-avatar" src="https://images.unsplash.com/photo-1594824813573-246434e3b96f?q=80&w=300" alt="Aline Mendes">
+                    <div class="prof-info">
+                        <span class="prof-tag">Suporte Neurodivergente</span>
+                        <h3>Dra. Aline Mendes</h3>
+                        <p class="prof-desc">Aplica o Karatê como terapia psicomotora para Autismo e TDAH.</p>
+                    </div>
+                </div>
+
+                <div class="prof-card card-click" 
+                     data-nome="Coach Thiago Santos" 
+                     data-cargo="Treinador de Boxe Adaptado & Fisioterapeuta"
+                     data-biografia="Thiago desenvolve metodologias de manoplas e sacos de pancada de alta absorção de impacto estruturadas especificamente para o treino sentado ou com órteses estáveis."
+                     data-especializacao="Fortalecimento de core e estabilização escapular para praticantes em cadeiras de rodas."
+                     data-estilo="Treino dinâmico focado em potência cardiovascular, ritmo coordenado e esquivas adaptadas."
+                     data-metas="Criar a primeira competição regional de Boxe adaptado em cadeira de rodas."
+                     data-agendamento="Segunda a Quinta: 18h às 21h."
+                     data-foto="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=300"
+                     data-whatsapp="5511977777777">
+                    <img class="prof-avatar" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=300" alt="Thiago Santos">
+                    <div class="prof-info">
+                        <span class="prof-tag">Boxe Tradicional & Adaptado</span>
+                        <h3>Coach Thiago Santos</h3>
+                        <p class="prof-desc">Fisioterapia aplicada ao combate esportivo e ganho de mobilidade de tronco.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <div id="modal-perfil" class="modal">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <div class="modal-header">
+                <img id="m-foto" class="modal-img" src="" alt="">
+                <div class="modal-header-info">
+                    <h2 id="m-nome"></h2>
+                    <p id="m-cargo" style="color: var(--accent); font-size:0.95rem; margin-top:4px;"></p>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="info-group">
+                    <h4>Sobre o Profissional</h4>
+                    <p id="m-biografia"></p>
+                </div>
+                <div class="info-group">
+                    <h4>Especialização Técnica</h4>
+                    <p id="m-especializacao"></p>
+                </div>
+                <div class="info-group">
+                    <h4>Estilo Didático</h4>
+                    <p id="m-estilo"></p>
+                </div>
+                <div class="info-group">
+                    <h4>Objetivos com Alunos Adaptados</h4>
+                    <p id="m-metas"></p>
+                </div>
+                <div class="info-group">
+                    <h4>Disponibilidade para Avaliação</h4>
+                    <p id="m-agendamento"></p>
+                </div>
+                <a id="m-whatsapp" class="btn-wpp" href="" target="_blank">💬 Agendar via WhatsApp</a>
             </div>
         </div>
     </div>
-
-    <footer>
-        <a href="index_convertido.php" class="logo" style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--text);text-decoration:none;">Adapt<span style="color:var(--accent)">Move</span></a>
-        <p>&copy; 2026 AdaptMove — Movimento e Inclusão.</p>
-    </footer>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-
     <script>
-        /* ── BANCO DE DADOS FICTÍCIO DAS ACADEMIAS ADAPTADAS ── */
-        const locais = [
-            {
-                nome: "Centro de Reabilitação e Treino Inclusivo ABC",
-                lat: -23.7122,
-                lng: -46.4135,
-                categoria: "cadeirante",
-                descricao: "Infraestrutura 100% plana com rampas de acesso, banheiros equipados e aparelhos de musculação adaptados para cadeirantes."
-            },
-            {
-                nome: "Instituto Psicomotor Estrela Azul",
-                lat: -23.7085,
-                lng: -46.4190,
-                categoria: "mental",
-                descricao: "Ambientes com isolamento acústico controlado e circuitos de psicomotricidade ideais para alunos autistas e neurodivergentes."
-            },
-            {
-                nome: "Dojô Alavanca de Solo - Para-Jiu-Jitsu",
-                lat: -23.7150,
-                lng: -46.4080,
-                categoria: "jiujitsu",
-                descricao: "Tatames de alta absorção com professores especializados em mecânica de solo adaptada para amputados e PcD."
-            },
-            {
-                nome: "Arena Boxe & Saúde Adaptada",
-                lat: -23.7101,
-                lng: -46.4250,
-                categoria: "boxe",
-                descricao: "Sacos de pancada com ajuste de altura automatizado e treino funcional de alta queima calórica estruturado."
-            }
-        ];
-
-        /* ── INICIALIZAÇÃO DO MAPA LEAFLET ── */
-        // Centralizado por padrão em Ribeirão Pires, SP
-        const map = L.map('map-container').setView([-23.7122, -46.4135], 14);
-
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors'
+        // Inicialização Local do Mapa Leaflet
+        const map = L.map('map').setView([-23.55052, -46.633308], 11); // São Paulo Base
+        
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; OpenStreetMap &copy; CARTO'
         }).addTo(map);
 
-        // Grupo para guardar os marcadores e podermos limpá-los facilmente
-        let marcadoresGrupo = L.layerGroup().addTo(map);
-
-        /* ── FUNÇÃO PRINCIPAL DE FILTRAGEM ── */
-        function filtrar(categoria, botao) {
-            // 1. Atualizar estilo visual dos botões
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            botao.classList.add('active');
-
-            // 2. Limpar os marcadores atuais do mapa
-            marcadoresGrupo.clearLayers();
-
-            // 3. Filtrar as academias da categoria selecionada
-            const locaisFiltrados = locais.filter(local => local.categoria === categoria);
-
-            // 4. Plotar os novos marcadores no mapa
-            locaisFiltrados.forEach(local => {
-                const marcador = L.marker([local.lat, local.lng]);
-                
-                // Conteúdo estilizado do pop-up
-                const popupContent = `
-                    <div>
-                        <h4>${local.nome}</h4>
-                        <p>${local.descricao}</p>
-                    </div>
-                `;
-                
-                marcador.bindPopup(popupContent);
-                marcadoresGrupo.addLayer(marcador);
-            });
-
-            // 5. Ajustar a visão do mapa para focar na primeira academia encontrada
-            if (locaisFiltrados.length > 0) {
-                map.setView([locaisFiltrados[0].lat, locaisFiltrados[0].lng], 15, { animate: true });
-            }
-        }
-
-        // Executar o filtro inicial ao carregar a página para o mapa não começar vazio
-        window.addEventListener('DOMContentLoaded', () => {
-            const primeiroBotao = document.querySelector('.filter-btn');
-            if (primeiroBotao) {
-                filtrar('cadeirante', primeiroBotao);
-            }
-        });
-
-        /* ── FUNÇÕES DO MODAL DOS PROFISSIONAIS ── */
-        const modal = document.getElementById('modal');
-        const btnFechar = document.getElementById('btn-fechar');
-
-        function abrirModal(card) {
-            document.getElementById('m-nome').innerText = card.getAttribute('data-nome');
-            document.getElementById('m-cargo').innerText = card.getAttribute('data-cargo');
-            document.getElementById('m-biografia').innerText = card.getAttribute('data-biografia');
-            document.getElementById('m-especializacao').innerText = card.getAttribute('data-especializacao');
-            document.getElementById('m-estilo').innerText = card.getAttribute('data-estilo');
-            document.getElementById('m-metas').innerText = card.getAttribute('data-metas');
-            document.getElementById('m-agendamento').innerText = card.getAttribute('data-agendamento');
-            document.getElementById('m-foto').src = card.getAttribute('data-foto');
-            document.getElementById('m-foto').alt = card.getAttribute('data-nome');
-            
-            const wppLink = "https://api.whatsapp.com/send?phone=" + card.getAttribute('data-whatsapp') + "&text=Olá! Gostaria de agendar uma avaliação com você.";
-            document.getElementById('m-whatsapp').href = wppLink;
-
-            modal.classList.add('active');
-        }
-
-        if(btnFechar) {
-            btnFechar.addEventListener('click', () => modal.classList.remove('active'));
-        }
-        window.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('active'); });
-
-        /* ── CONTROLADORES DE ACESSIBILIDADE VISUAL ── */
-        function alterarFonte() { document.body.classList.toggle('fonte-dislexia'); }
-        function alterarContraste() { document.body.classList.toggle('alto-contraste'); }
+        // Marcadores de Exemplo coerentes com a lista
+        L.marker([-23.5615, -46.6562]).addTo(map).bindPopup('<b>Centro de Treinamento Ricardo Silva</b><br>Para-Jiu-Jitsu e Acessibilidade.');
+        L.marker([-23.5875, -46.6575]).addTo(map).bindPopup('<b>Clínica e Dojô Aline Mendes</b><br>Karatê cognitivo e comportamental.');
+        L.marker([-23.5432, -46.6421]).addTo(map).bindPopup('<b>Boxe Evolution Thiago Santos</b><br>Estrutura totalmente plana.');
     </script>
+    <script src="script.js"></script>
 </body>
 </html>

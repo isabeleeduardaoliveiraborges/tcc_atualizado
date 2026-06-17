@@ -1,97 +1,109 @@
-// Função para simular o clique nos filtros do mapa
-function filtrar(tipo) {
-    const mapaTexto = document.querySelector('.map-placeholder p');
-    
-    // Atualiza o texto do mapa fingindo que está aplicando a busca
-    if (tipo === 'cadeirante') {
-        mapaTexto.innerHTML = "📍 Mostrando academias com rampas e banheiros acessíveis...";
-    } else if (tipo === 'mental') {
-        mapaTexto.innerHTML = "📍 Mostrando dojôs com suporte a Autismo, Síndrome de Down e TDAH...";
-    } else if (tipo === 'jiujitsu') {
-        mapaTexto.innerHTML = "📍 Filtrando por locais que oferecem Para-Jiu-Jitsu...";
-    } else if (tipo === 'boxe') {
-        mapaTexto.innerHTML = "📍 Filtrando por locais com treinos adaptados de Boxe/Muay Thai...";
+// script.js
+
+// Função que substitui os textos estáticos por dados reais do Banco de Dados via PHP (AJAX/Fetch)
+function filtrar(tipo, btn) {
+    // 1. Gerencia as classes visuais dos botões ativos da seção do mapa
+    if (btn) {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
     }
+
+    // 2. Faz a chamada ao backend PHP passando o parâmetro de filtro
+    fetch(`buscar_academias.php?tipo=${tipo}`)
+        .then(response => {
+            if (!response.ok) throw new Error('Erro na comunicação com o servidor.');
+            return response.json();
+        })
+        .then(data => {
+            // 3. Atualiza os elementos da seção do mapa dinamicamente
+            const mapIcon = document.querySelector('.map-icon');
+            const mapText = document.getElementById('map-text');
+            const mapSub = document.getElementById('map-sub');
+
+            if (mapIcon) mapIcon.textContent = data.icone;
+            if (mapText) mapText.textContent = data.descricao;
+            if (mapSub)  mapSub.textContent = data.status_info;
+        })
+        .catch(error => {
+            console.error('Erro ao buscar dados:', error);
+            const mapText = document.getElementById('map-text');
+            if (mapText) mapText.textContent = "Não foi possível carregar os dados agora.";
+        });
 }
 
-// Recurso de Acessibilidade 1: Mudar a fonte para leitura fácil (Dislexia)
+// Recursos Globais de Acessibilidade Visual
 function alterarFonte() {
     document.body.classList.toggle('fonte-dislexia');
 }
 
-// Recurso de Acessibilidade 2: Ativar o modo de Alto Contraste
 function alterarContraste() {
     document.body.classList.toggle('alto-contraste');
 }
-// --- LÓGICA DO MODAL DE PROFISSIONAIS ---
+
+// Lógica Unificada do Modal de Profissionais
 document.addEventListener('DOMContentLoaded', function () {
     const modal = document.getElementById('modal-perfil');
     const btnFechar = document.querySelector('.modal-close');
+    const cards = document.querySelectorAll('.card-click'); // Seletor ajustado para bater com a página de profissionais
  
-    // Abre o modal ao clicar em qualquer botão de profissional
-    document.querySelectorAll('.btn-modal-trigger').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            document.getElementById('modal-foto').src        = btn.dataset.foto;
-            document.getElementById('modal-foto').alt        = btn.dataset.nome;
-            document.getElementById('modal-nome').textContent         = btn.dataset.nome;
-            document.getElementById('modal-cargo').textContent        = btn.dataset.cargo;
-            document.getElementById('modal-especializacao').textContent = btn.dataset.especializacao;
-            document.getElementById('modal-experiencia').textContent  = btn.dataset.experiencia;
-            document.getElementById('modal-modalidades').textContent  = btn.dataset.modalidades;
-            document.getElementById('modal-estilo').textContent       = btn.dataset.estilo;
-            document.getElementById('modal-biografia').textContent    = btn.dataset.biografia;
-            document.getElementById('modal-whatsapp').href =
-                'https://wa.me/' + btn.dataset.whatsapp;
- 
-            modal.classList.add('active');
-        });
-    });
- 
-    // Fecha ao clicar no X
-    if (btnFechar) {
-        btnFechar.addEventListener('click', function () {
-            modal.classList.remove('active');
+    if (cards.length > 0 && modal) {
+        cards.forEach(function (card) {
+            card.addEventListener('click', function () {
+                document.getElementById('m-foto').src = card.getAttribute('data-foto');
+                document.getElementById('m-foto').alt = card.getAttribute('data-nome');
+                document.getElementById('m-nome').innerText = card.getAttribute('data-nome');
+                document.getElementById('m-cargo').innerText = card.getAttribute('data-cargo');
+                document.getElementById('m-biografia').innerText = card.getAttribute('data-biografia');
+                document.getElementById('m-especializacao').innerText = card.getAttribute('data-especializacao');
+                document.getElementById('m-estilo').innerText = card.getAttribute('data-estilo');
+                document.getElementById('m-metas').innerText = card.getAttribute('data-metas');
+                document.getElementById('m-agendamento').innerText = card.getAttribute('data-agendamento');
+                
+                const wppLink = "https://api.whatsapp.com/send?phone=" + card.getAttribute('data-whatsapp') + "&text=Olá! Gostaria de agendar uma avaliação com você.";
+                document.getElementById('m-whatsapp').href = wppLink;
+     
+                modal.classList.add('active');
+            });
         });
     }
  
-    // Fecha ao clicar fora do modal
-    modal.addEventListener('click', function (e) {
-        if (e.target === modal) {
-            modal.classList.remove('active');
-        }
-    });
+    if (btnFechar && modal) {
+        btnFechar.addEventListener('click', () => modal.classList.remove('active'));
+    }
  
-    // Fecha com a tecla ESC
+    window.addEventListener('click', (e) => { 
+        if (modal && e.target === modal) modal.classList.remove('active'); 
+    });
+
     document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') {
+        if (e.key === 'Escape' && modal) {
             modal.classList.remove('active');
         }
     });
-})
+});
 
+// Filtros Locais para Cards Estáticos (Página Recomendados)
 document.addEventListener('DOMContentLoaded', () => {
-    const filterButtons = document.querySelectorAll('.filter-btn');
+    const filterButtons = document.querySelectorAll('.filter-btn-sport');
     const sportCards = document.querySelectorAll('.sport-card');
 
-    filterButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            // 1. Remove classe 'active' de todos os botões e adiciona no clicado
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
+    if (filterButtons.length > 0) {
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.add('active');
 
-            // 2. Pega o valor do filtro selecionado
-            const filterValue = button.getAttribute('data-filter');
+                const filterValue = button.getAttribute('data-filter');
 
-            // 3. Mostra ou oculta os cards baseado na categoria
-            sportCards.forEach(card => {
-                const cardCategory = card.getAttribute('data-category');
-
-                if (filterValue === 'todos' || filterValue === cardCategory) {
-                    card.style.display = 'flex'; // Exibe o card
-                } else {
-                    card.style.display = 'none'; // Oculta o card
-                }
+                sportCards.forEach(card => {
+                    const cardCategory = card.getAttribute('data-category');
+                    if (filterValue === 'todos' || filterValue === cardCategory) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
             });
         });
-    });
+    }
 });
